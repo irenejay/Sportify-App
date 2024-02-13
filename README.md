@@ -1,5 +1,3 @@
-Certainly! Here's a simple `README.md` template for a hypothetical "Sportify App":
-
 # Sportify App
 
 Sportify is an innovative sports application designed to enhance your sports experience. Whether you're an athlete, coach, or a passionate sports enthusiast, Sportify has something to offer for everyone.
