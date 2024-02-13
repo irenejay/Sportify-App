@@ -45,7 +45,7 @@ const Events= () => {
               <p>{event.strEvent}</p>
               <p>Date: {event.dateEvent}</p>
               <p>Venue: {event.strVenue}</p>
-              {/* Additional event information */}
+            
             </li>
           ))}
         </ul>
