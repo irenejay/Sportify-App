@@ -6,8 +6,38 @@
       "strTeam": "Arsenal",
       "goals": "3",
       "id": 1
+    },
+    {
+      "id": "3f77",
+      "strPlayer": "Enzo fernandez",
+      "strNumber": "8",
+      "strTeam": "Arsenal",
+      "goals": "3"
+    },
+    {
+      "id": "c512",
+      "strPlayer": "Enzo fernandez",
+      "strNumber": "8",
+      "strTeam": "Arsenal",
+      "goals": "3"
+    },
+    {
+      "id": "3269",
+      "strPlayer": "Enzo fernandez",
+      "strNumber": "8",
+      "strTeam": "Arsenal",
+      "goals": "3"
+    },
+    {
+      "id": "66d7",
+      "strPlayer": "Enzo fernandez",
+      "strNumber": "8",
+      "strTeam": "Arsenal",
+      "goals": "3"
     }
   ],
   "teams": [],
-  "events": []
+  "events": [
+    {}
+  ]
 }

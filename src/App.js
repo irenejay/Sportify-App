@@ -1,11 +1,17 @@
 import React from "react";
-import Players from "./components/Players";
+
+import Events from "./components/Events";
+
+
 
 function App() {
   return (
     <div className="container">
       <h1 style={{textAlign:'center'}}>Sportify App</h1>
-      <Players />
+     
+      <Events/>
+    
+  
     </div>
   );
 }
