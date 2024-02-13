@@ -1,11 +1,13 @@
 {
-    "players": [
-
-    ],
-    "teams": [
-
-    ],
-    "events": [
-        
-    ]
+  "players": [
+    {
+      "strPlayer": "Enzo fernandez",
+      "strNumber": "8",
+      "strTeam": "Arsenal",
+      "goals": "3",
+      "id": 1
+    }
+  ],
+  "teams": [],
+  "events": []
 }

@@ -34,6 +34,14 @@ Sportify is an innovative sports application designed to enhance your sports exp
 
 5. **Visit [http://localhost:3000](http://localhost:3000) in your browser.**
 
+### Components
+Home component. Is to render a home page.
+#### Features
+Display data. 3 to 4 sections. We have one section for players. We have another section for our leagues. We have events. 
+Navbar. Players, events , leagues.
+Search Bar. It uses a toggle that accepts one of three things. players. event. league.
+
+
 ## Technologies Used
 
 - Node.js
@@ -43,10 +51,10 @@ Sportify is an innovative sports application designed to enhance your sports exp
 
 
 ## Contributing
-Evalyne Kariuki 
-Eliab Karan
-Irene Jimmy
-Rachael Njoki
-Don Gitonga
+- Evalyne Kariuki 
+- Eliab Karan
+- Irene Jimmy
+- Rachael Njoki
+- Don Gitonga
 
 While contributing remember to make your own branch. Then your code will be reviewed. After review we will add your code to the main branch.
