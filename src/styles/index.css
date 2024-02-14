@@ -1,2 +1,15 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+h1,h2 {
+    text-align: center;
+    padding: 5px;
+}
+.header {
+    background: url('https://images.pexels.com/photos/2935983/pexels-photo-2935983.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover;
+    color: white; 
+    padding: 200px 0;
+
+}
 

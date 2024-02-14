@@ -6,6 +6,13 @@
       "strTeam": "Arsenal",
       "goals": "3",
       "id": 1
+    },
+    {
+      "strPlayer": "Enzo fernandez",
+      "strNumber": "8",
+      "strTeam": "Arsenal",
+      "goals": "3",
+      "id": 2
     }
   ],
   "teams": [],
