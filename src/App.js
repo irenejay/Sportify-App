@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import Leagues from "./components/Leagues";
 import Navbar from "./components/Navbar";
 import Teams from "./components/Teams";
+import LeagueDetails from "./components/LeagueDetails";
 
 function App() {
   const [leagues, setLeagues] = useState([]);
@@ -46,7 +47,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Leagues" element={<Leagues leagues={leagues} />} />
-        <Route path="/Teams" element={<Teams leagues={top5leagues} />} />
+        <Route path="/Teams" element={<Teams />} />
+        <Route path="/league/:leagueName" element={<LeagueDetails />} />
       </Routes>
     </div>
   );

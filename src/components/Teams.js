@@ -1,44 +1,39 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
 
-const Teams = ({ leagues }) => {
+const Teams = ({ leagueName }) => {
   const [allTeams, setAllTeams] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [teamsPerPage] = useState(9);
+  const [teamsPerPage] = useState(8);
 
-  // Define the countries array
-  const countries = ['England', 'France', 'Spain', 'Italy', 'Germany'];
+  const navigate = useNavigate(); // Get the navigation function
 
   useEffect(() => {
     fetchTeams();
-  }, [leagues]);
+  }, [leagueName]);
+
+  const handleButtonClick = (selectedTeam) => {
+    const teamName = encodeURIComponent(selectedTeam.strTeam);
+    navigate(`/teams/${teamName}`);
+  };
 
   const fetchTeams = async () => {
     try {
-      const promises = leagues.map(async (league) => {
-        const url = `https://www.thesportsdb.com/api/v1/json/60130162/search_all_teams.php?l=${encodeURIComponent(league.strLeague)}`;
-        const response = await fetch(url, {
-          headers: {
-            "Accept": "application/json",
-            "User-Agent": "Your User Agent",
-          },
-        });
-
-        const data = await response.json();
-        console.log("Teams Data:", data);
-
-        if (data.teams) {
-          // Filter teams by countries with case-insensitive and partial matching
-          const teamsFromSelectedCountries = data.teams.filter(team =>
-            countries.some(country => team.strCountry.toLowerCase().includes(country.toLowerCase()))
-          );
-
-          setAllTeams((prevTeams) => [...prevTeams, ...teamsFromSelectedCountries]);
-        }
+      const url = `https://www.thesportsdb.com/api/v1/json/60130162/search_all_teams.php?l=${encodeURIComponent(leagueName)}`;
+      const response = await fetch(url, {
+        headers: {
+          "Accept": "application/json",
+          "User-Agent": "Your User Agent",
+        },
       });
 
-      await Promise.all(promises);
+      const data = await response.json();
+
+      if (data.teams) {
+        setAllTeams(data.teams);
+      }
     } catch (error) {
       console.error("Error fetching teams:", error);
     }
@@ -55,18 +50,14 @@ const Teams = ({ leagues }) => {
     );
   };
 
-  const sortTeamsByCountry = (teams) => {
-    return teams.sort((a, b) => a.strCountry.localeCompare(b.strCountry));
-  };
-
   const indexOfLastTeam = currentPage * teamsPerPage;
   const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
-  const currentTeams = sortTeamsByCountry(filterTeams(allTeams, searchTerm)).slice(
+  const currentTeams = filterTeams(allTeams, searchTerm).slice(
     indexOfFirstTeam,
     indexOfLastTeam
   );
 
-  const totalPages = Math.ceil(sortTeamsByCountry(filterTeams(allTeams, searchTerm)).length / teamsPerPage);
+  const totalPages = Math.ceil(filterTeams(allTeams, searchTerm).length / teamsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -85,7 +76,7 @@ const Teams = ({ leagues }) => {
       </div>
       <div className="row">
         {currentTeams.map((team) => (
-          <div key={team.idTeam} className="col-md-4 mb-4">
+          <div key={team.idTeam} className="col-md-3 mb-3">
             <div className="card">
               <img
                 src={team.strTeamBadge}
@@ -95,7 +86,9 @@ const Teams = ({ leagues }) => {
               <div className="card-body">
                 <h5 className="card-title">{team.strTeam}</h5>
                 <p className="card-text">Sport: {team.strSport}</p>
-                <p className="card-text">Country: {team.strCountry}</p>
+                <button className="btn btn-primary" onClick={() => handleButtonClick(team)}>
+                  Get Information
+                </button>
               </div>
             </div>
           </div>
