@@ -24,7 +24,7 @@ const Players = ({ team }) => {
   
       if (data.player) {
         // Filter players based on strSport === 'Soccer'
-        const soccerPlayers = data.player.filter(player => player.strSport === 'Soccer' && player.strGender==='Male');
+        const soccerPlayers = data.player.filter(player => player.strSport === 'Soccer' && player.strGender === 'Male');
         
         setPlayers(soccerPlayers);
       } else {
@@ -33,7 +33,30 @@ const Players = ({ team }) => {
     } catch (error) {
       console.error('Error fetching data', error);
     }
-  }
+  };
+
+  const addFavorite = async (player) => {
+    try {
+      const response = await fetch('http://localhost:8001/players', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(player)
+      });
+      
+      if (response.ok) {
+        console.log('Player details added as favorite:', player);
+        // You can handle success feedback here if needed
+      } else {
+        console.error('Failed to add player details as favorite');
+        // You can handle error feedback here if needed
+      }
+    } catch (error) {
+      console.error('Error adding player details as favorite:', error);
+      // You can handle error feedback here if needed
+    }
+  };
 
   const indexOfLastPlayer = currentPage * playersPerPage;
   const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
@@ -73,6 +96,9 @@ const Players = ({ team }) => {
                   Twitter: <a href={player.strTwitter} target="_blank" rel="noopener noreferrer">{player.strTwitter}</a>
                 </p>
                 <p className="card-text">Role: {player.strPosition}</p>
+                <button className="btn btn-primary" onClick={() => addFavorite(player)}>
+                  Add Favorite
+                </button>
               </div>
             </div>
             <div className="col-md-4">
@@ -80,7 +106,7 @@ const Players = ({ team }) => {
                 src={player.strThumb}
                 alt={`${player.strPlayer} thumbnail`}
                 className="img-fluid rounded-start"
-                style={{ width: '75%' }}
+                style={{ width: '100%' }}
               />
             </div>
           </div>

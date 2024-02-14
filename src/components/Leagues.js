@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link,useNavigate } from "react-router-dom"; // Import Link from react-router-dom
+import { Link, useNavigate } from "react-router-dom"; // Import Link from react-router-dom
 import Pagination from "./Pagination";
 
 export default function Leagues({ leagues }) {
@@ -9,26 +9,15 @@ export default function Leagues({ leagues }) {
   const [leaguesPerPage] = useState(8);
 
   const navigate = useNavigate(); // Get the navigation function
-  
 
   useEffect(() => {
     // If you want to fetch data when the leagues prop changes, add your fetch logic here
   }, [leagues]);
 
-  const toggleDescription = (league) => {
+  const handleButtonClick = (league) => {
     setSelectedLeague(league);
+    addFavoriteLeague(league);
   };
-
-  const handleButtonClick = () => {
-    // Check if selectedLeague is not null before accessing its properties
-    if (selectedLeague && selectedLeague.strLeague) {
-      // Instead of calling getInformation directly, navigate to the league details page
-      const leagueName = encodeURIComponent(selectedLeague.strLeague);
-      console.log('This is the league name'+ leagueName)
-      navigate(`/leagues/${selectedLeague}`);
-    }
-  };
-  
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -53,6 +42,28 @@ export default function Leagues({ leagues }) {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const addFavoriteLeague = async (league) => {
+    if (league && league.strLeague) {
+      try {
+        const response = await fetch("http://localhost:8001/leagues", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(league),
+        });
+        if (response.ok) {
+          console.log("League added to favorites successfully!");
+          // Optionally, you can navigate or perform any action after successful addition
+        } else {
+          console.error("Failed to add league to favorites.");
+        }
+      } catch (error) {
+        console.error("Error adding league to favorites:", error);
+      }
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Football Leagues</h2>
@@ -76,23 +87,15 @@ export default function Leagues({ leagues }) {
                   alt={league.strLeague}
                 />
                 <div className="card-body">
-                  <h5
-                    className="card-title"
-                    onClick={() => toggleDescription(league)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {league.strLeague}
-                  </h5>
+                  <h5 className="card-title">{league.strLeague}</h5>
                   <p className="card-text">Country: {league.strCountry}</p>
                   <p className="card-text">
                     <a href={`http://${league.strWebsite}`} target="_blank" rel="noopener noreferrer">Website</a>
                   </p>
                   {/* Bootstrap Button */}
-                  <Link to={`/league/${encodeURIComponent(league.strLeague)}`}>
-                    <button className="btn btn-primary" onClick={handleButtonClick}>
-                      Get Information
-                    </button>
-                  </Link>
+                  <button className="btn btn-primary" onClick={() => handleButtonClick(league)}>
+                    Add Favorite
+                  </button>
                 </div>
               </div>
             </div>

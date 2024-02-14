@@ -19,6 +19,29 @@ const Teams = ({ leagueName }) => {
     navigate(`/teams/${teamName}`);
   };
 
+  const onButtonClick = async (team) => {
+    try {
+      const response = await fetch('http://localhost:8001/teams', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(team)
+      });
+
+      if (response.ok) {
+        console.log('Team added to favorites:', team);
+        // You can add some feedback to the user if needed
+      } else {
+        console.error('Failed to add team to favorites');
+        // You can handle error feedback here if needed
+      }
+    } catch (error) {
+      console.error('Error adding team to favorites:', error);
+      // You can handle error feedback here if needed
+    }
+  };
+
   const fetchTeams = async () => {
     try {
       const url = `https://www.thesportsdb.com/api/v1/json/60130162/search_all_teams.php?l=${encodeURIComponent(leagueName)}`;
@@ -88,6 +111,9 @@ const Teams = ({ leagueName }) => {
                 <p className="card-text">Sport: {team.strSport}</p>
                 <button className="btn btn-primary" onClick={() => handleButtonClick(team)}>
                   Get Information
+                </button>
+                <button className="btn btn-primary" onClick={() => onButtonClick(team)}>
+                  Add Favorite
                 </button>
               </div>
             </div>

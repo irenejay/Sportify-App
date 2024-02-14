@@ -9,6 +9,7 @@ const Home = () => {
       <div className="header">
         <div className="container text-center">
           <h1 className="mb-4"> FootFlick</h1>
+          
         </div>
       </div>
 

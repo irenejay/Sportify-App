@@ -56,6 +56,29 @@ function Events() {
     return countryName;
   };
 
+  const onButtonClick = async (event) => {
+    try {
+      const response = await fetch('http://localhost:8001/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(event)
+      });
+
+      if (response.ok) {
+        console.log('Event added to favorites:', event);
+        // You can add some feedback to the user if needed
+      } else {
+        console.error('Failed to add event to favorites');
+        // You can handle error feedback here if needed
+      }
+    } catch (error) {
+      console.error('Error adding event to favorites:', error);
+      // You can handle error feedback here if needed
+    }
+  };
+
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Current TV Events Based On your location</h2>
@@ -65,6 +88,7 @@ function Events() {
             <th>Event</th>
             <th>Time</th>
             <th>Channel</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -73,6 +97,11 @@ function Events() {
               <td>{event.strEvent}</td>
               <td>{event.strTime}</td>
               <td>{event.strChannel}</td>
+              <td>
+                <button className="btn btn-primary" onClick={() => onButtonClick(event)}>
+                  Add Favorite
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

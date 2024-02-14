@@ -10,6 +10,27 @@ const Highlights = () => {
     fetchHighlights();
   }, []);
 
+  const onButtonClick = async (highlight) => {
+    try {
+      const response = await fetch('http://localhost:8001/Highlights', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ highlight }),
+      });
+  
+      if (response.ok) {
+        console.log('Highlight added to favorites successfully!');
+      } else {
+        console.error('Failed to add highlight to favorites');
+      }
+    } catch (error) {
+      console.error('Error adding highlight to favorites:', error);
+    }
+  };
+  
+
   const fetchHighlights = async () => {
     const url = `https://www.thesportsdb.com/api/v1/json/60130162/eventshighlights.php?s=Soccer`;
 
@@ -68,6 +89,9 @@ const Highlights = () => {
                 <h5 className="card-title">{highlight.strEvent}</h5>
                 <p className="card-text">League: {highlight.strLeague}</p>
                 <p className="card-text">Date: {highlight.dateEvent}</p>
+                <button className="btn btn-primary" onClick={() => onButtonClick(highlight)}>
+                  Add Favorite
+                </button>
               </div>
             </div>
           </div>
