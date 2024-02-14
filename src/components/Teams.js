@@ -109,6 +109,7 @@ const Teams = ({ leagueName }) => {
               <div className="card-body">
                 <h5 className="card-title">{team.strTeam}</h5>
                 <p className="card-text">Sport: {team.strSport}</p>
+                <p className="card-rext">Leagues: {team.strLeague},{team.strLeague2},{team.strLeague3},{team.strLeague4} </p>
                 <button className="btn btn-primary" onClick={() => handleButtonClick(team)}>
                   Get Information
                 </button>

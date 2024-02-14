@@ -93,6 +93,11 @@ export default function Leagues({ leagues }) {
                     <a href={`http://${league.strWebsite}`} target="_blank" rel="noopener noreferrer">Website</a>
                   </p>
                   {/* Bootstrap Button */}
+                  <Link to={`/league/${encodeURIComponent(league.strLeague)}`}>
+                    <button className="btn btn-primary" onClick={() => handleButtonClick(league)}>
+                      Get Information
+                    </button>
+                  </Link>
                   <button className="btn btn-primary" onClick={() => handleButtonClick(league)}>
                     Add Favorite
                   </button>

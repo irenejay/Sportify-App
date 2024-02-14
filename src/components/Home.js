@@ -2,6 +2,7 @@
 import React from "react";
 import Highlights from "./Highlights";
 import Events from "./Events";
+import SearchBar from "./Search";
 
 const Home = () => {
   return (
@@ -9,7 +10,7 @@ const Home = () => {
       <div className="header">
         <div className="container text-center">
           <h1 className="mb-4"> FootFlick</h1>
-          
+          <SearchBar />
         </div>
       </div>
 
