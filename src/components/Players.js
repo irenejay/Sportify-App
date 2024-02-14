@@ -1,106 +1,21 @@
-// import React, { useState, useEffect } from "react";
-
-// export default function Players() {
-//     const [players, setPlayers] = useState([]);
-
-//     useEffect(() => {
-//         FetchPlayerDetails();
-//     }, []);
-
-//     const FetchPlayerDetails = async () => {
-//         const teams = ['Arsenal'];
-
-//         try {
-//             const teamPromises = teams.map(async (team) => {
-//                 const url = `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?t=${team}`;
-//                 const response = await fetch(url, {
-//                     headers: {
-//                         'Accept': 'application/json',
-//                         'User-agent': 'learning app',
-//                     }
-//                 });
-//                 const data = await response.json();
-//                 return data.player;
-//             });
-
-//             const teamPlayers = await Promise.all(teamPromises);
-
-//             // Flatten the array of arrays into a single array
-//             const allPlayers = teamPlayers.flat();
-            
-//             setPlayers(allPlayers);
-//         } catch (error) {
-//             console.error('Error fetching data', error);
-//         }
-//     }
-
-//     const newPlayer= {
-//         strPlayer: '',
-//         strNumber: '',
-//         strTeam: '',
-//         goals: ''
-//     }
-
-//     const addPlayer = async () => {
-//         try {
-//             const response = await fetch('http://localhost:8000/players', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json'
-//                 },
-//                 body: JSON.stringify(newPlayer)
-//             })
-//             if (response.ok) {
-//                 alert('Player added successfully');
-//             } else {
-//                 console.error('Failed to add player')
-//             }
-//         } catch (error) {
-//             console.error('Failed to add player', error);
-//         }
-//         setPlayers(prevPlayers => [...prevPlayers, newPlayer])
-//     }
-
-//     return (
-//         <div >
-//             <button onClick={addPlayer}>Add New Player</button>
-//             {players.map((player, index) => (
-//                 <div key={index} className="container-sm container-frame" style={{ cursor: 'pointer', marginBottom: '20px',border: '3px solid #008000', width: '50%'}}>
-//                     <figure className="figure">
-//                     <img src={player.strThumb}alt="Avatar ofplayers"  style={{ width: 100, height: 100 }} />
-//                     <p>Name: {player.strPlayer}</p>
-//                     <p>Nationality: {player.strNationality}</p>
-//                     <p>Description: {player.strDescriptionEN}</p>
-//                     <p>Twitter: {player.strTwitter}</p>
-                    
-//                     </figure>
-//                 </div>
-//             ))}
-//         </div>
-//     )
-// }
 import React, { useState, useEffect } from "react";
+
 
 export default function Players() {
     const [players, setPlayers] = useState([]);
-    const [playerForm, setPlayerForm] = useState({
-        strPlayer: '',
-        strNumber: '',
-        strTeam: '',
-      strThumb:''
-
-    });
+    // const [ favouriteCount,setFavouriteCount] = useState(0)
+    
 
     useEffect(() => {
-        fetchPlayerDetails();
+        FetchPlayerDetails();
     }, []);
 
-    const fetchPlayerDetails = async () => {
-        const teams = ['Arsenal'];
+    const FetchPlayerDetails = async () => {
+        const teams = ['Arsenal','Barcelona','Dortmund','Monaco','Napoli'];
 
         try {
             const teamPromises = teams.map(async (team) => {
-                const url = `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?t=${team}`;
+                const url = `https://www.thesportsdb.com/api/v1/json/60130162/searchplayers.php?t=${team}`;
                 const response = await fetch(url, {
                     headers: {
                         'Accept': 'application/json',
@@ -112,89 +27,85 @@ export default function Players() {
             });
 
             const teamPlayers = await Promise.all(teamPromises);
-            
-            const allPlayers = teamPlayers.flat();
-            
+
+            // Flatten the array of arrays into a single array 
+            // initializes the favourite count to zero
+            const allPlayers = teamPlayers.flat().map(player => ({ ...player, favoriteCount: 0 }));
+
             setPlayers(allPlayers);
+            
+            
         } catch (error) {
             console.error('Error fetching data', error);
         }
-    };
+    }
 
-    const addPlayer = async (event) => {
-        event.preventDefault(); 
-        try {
-            const response = await fetch('http://localhost:8002/players', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(playerForm)
-            });
-            if (response.ok) {
-                const addedPlayer = await response.json();
-                setPlayers(prevPlayers => [...prevPlayers, addedPlayer]);
-                alert('Player added successfully');
-            } else {
-                console.error('Failed to add player');
-            }
-        } catch (error) {
-            console.error('Failed to add player', error);
-        }
-    };
+    // const newPlayer= {
+    //     strPlayer: '',
+    //     strNumber: '',
+    //     strThumb: '',
+    //     strNationality: '',
+    //     strDescriptionEN:"",
+    //     strStatus:''
+    // }
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setPlayerForm(prevForm => ({
-            ...prevForm,
-            [name]: value
-        }));
-    };
-
+    // const addPlayer = async () => {
+    //     try {
+    //         const response = await fetch('http://localhost:8001/players', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(newPlayer)
+    //         })
+    //         if (response.ok) {
+    //             alert('Player added successfully');
+    //         } else {
+    //             console.error('Failed to add player')
+    //         }
+    //     } catch (error) {
+    //         console.error('Failed to add player', error);
+    //     }
+    //     setPlayers(prevPlayers => [...prevPlayers, newPlayer])
+    // }
+    
+    //  updates the favourite count by one of each player 
+    const handleFavourite = (index) => {
+        setPlayers(prevPlayers => {
+            const updatedPlayers = [...prevPlayers];
+            updatedPlayers[index].favoriteCount += 1;
+            return updatedPlayers;
+        });
+    }
+    function changeBackground(e) {
+        e.target.style.background = 'red';
+        e.target.style.cursor  = ' pointer'
+      }
+      function changeColorOnLeave(e){
+        e.target.style.background = 'green';
+        e.target.style.cursor  = ' pointer'
+      }
     return (
-        <div>
-            <form onSubmit={addPlayer}>
-                <input
-                    type="text"
-                    name="strPlayer"
-                    value={playerForm.strPlayer}
-                    onChange={handleInputChange}
-                    placeholder="Player Name"
-                />
-                <input
-                    type="text"
-                    name="strNumber"
-                    value={playerForm.strNumber}
-                    onChange={handleInputChange}
-                    placeholder="Player Number"
-                />
-                <input
-                    type="text"
-                    name="strTeam"
-                    value={playerForm.strTeam}
-                    onChange={handleInputChange}
-                    placeholder="Team"
-                />
-               <input
-    type="url"
-    name="strThumb" 
-    value={playerForm.strThumb} 
-    onChange={handleInputChange}
-    placeholder="Image URL"
-/>
-                <button type="submit">Add Player</button>
-            </form>
+        <div >
+            <button >Add New Player</button>
             {players.map((player, index) => (
-                <div key={index} className="container-sm container-frame" style={{ cursor: 'pointer', marginBottom: '20px', border: '3px solid #008000', width: '50%' }}>
+                <div key={index} className="container-sm container-frame" style={{ cursor: 'pointer', marginBottom: '20px',border: '3px solid #008000', width: '50%'}}>
                     <figure className="figure">
-                        <img src={player.strThumb} alt="Avatar of players" style={{ width: 100, height: 100 }} />
-                        <p>Name: {player.strPlayer}</p>
-                        <p>Nationality: {player.strNationality}</p>
-                        <p>Description: {player.strDescriptionEN}</p>
-                        <p>Twitter: {player.strTwitter}</p>
+                    <img src={player.strThumb}alt="Avatar ofplayers"  style={{ width: 100, height: 100 }} />
+                    <p><strong>Name:</strong> {player.strPlayer}</p>
+                    <p><strong>Nationality:</strong> {player.strNationality}</p>
+                    <p><strong>Description: </strong>{player.strDescriptionEN}</p>
+                    <p ><strong>Status:</strong> {player.strStatus}</p>
+     
+ 
+
+                    <button onMouseLeave={changeColorOnLeave}  onMouseOver ={changeBackground}onClick={() => handleFavourite(index)} className= 'btn btn-info'style={{ cursor: 'pointer' }}>
+                            Favourites ❤️{player.favoriteCount}
+                        </button>
+                    
                     </figure>
                 </div>
             ))}
         </div>
-    );
+    )
 }
