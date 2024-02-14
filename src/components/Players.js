@@ -1,74 +1,102 @@
 import React, { useState, useEffect } from "react";
+import Pagination from "./Pagination"; // Adjust the path based on your project structure
 
-export default function Players() {
-    const [players, setPlayers] = useState([]);
+const Players = ({ team }) => {
+  const [players, setPlayers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [playersPerPage] = useState(5); // Adjust the number of players per page as needed
+  const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        FetchPlayerDetails();
-    }, []);
+  useEffect(() => {
+    fetchPlayerDetails();
+  }, [team, searchTerm]); // Include searchTerm in the dependency array to re-fetch when the search term changes
 
-    const FetchPlayerDetails = async () => {
-        const teams = ['Chelsea', 'Barcelona'];
-
-        try {
-            const teamPromises = teams.map(async (team) => {
-                const url = `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?t=${team}`;
-                const response = await fetch(url, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'User-agent': 'learning app',
-                    }
-                });
-                const data = await response.json();
-                return data.player;
-            });
-
-            const teamPlayers = await Promise.all(teamPromises);
-
-            // Flatten the array of arrays into a single array
-            const allPlayers = teamPlayers.flat();
-            
-            setPlayers(allPlayers);
-        } catch (error) {
-            console.error('Error fetching data', error);
+  const fetchPlayerDetails = async () => {
+    try {
+      const url = `https://www.thesportsdb.com/api/v1/json/60130162/searchplayers.php?t=${team}&p=${searchTerm}`;
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'User-agent': 'learning app',
         }
+      });
+      const data = await response.json();
+  
+      if (data.player) {
+        // Filter players based on strSport === 'Soccer'
+        const soccerPlayers = data.player.filter(player => player.strSport === 'Soccer' && player.strGender==='Male');
+        
+        setPlayers(soccerPlayers);
+      } else {
+        console.error('No player data found for the team:', team);
+      }
+    } catch (error) {
+      console.error('Error fetching data', error);
     }
+  }
 
-    const player = {
-        strPlayer: 'Enzo fernandez',
-        strNumber: '8',
-        strTeam: 'Arsenal',
-        goals: '3'
-    }
+  const indexOfLastPlayer = currentPage * playersPerPage;
+  const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
+  const currentPlayers = players.slice(indexOfFirstPlayer, indexOfLastPlayer);
 
-    const addPlayer = async () => {
-        try {
-            const response = await fetch('http://localhost:8000/players', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(player)
-            })
-            if (response.ok) {
-                alert('Player added successfully');
-            } else {
-                console.error('Failed to add player')
-            }
-        } catch (error) {
-            console.error('Failed to add player', error);
-        }
-        setPlayers(prevPlayers => [...prevPlayers, player])
-    }
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
-    return (
-        <div>
-            <button onClick={addPlayer}>Add Player</button>
-            {players.map((player, index) => (
-                <div key={index}>
-                    <p>Name: {player.strPlayer}</p>
-                </div>
-            ))}
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1); // Reset page to 1 when the search term changes
+  };
+
+  return (
+    <div className="container mt-5">
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search for players"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
+
+      {currentPlayers.map((player, index) => (
+        <div key={index} className="card mb-3">
+          <div className="row g-0">
+            <div className="col-md-8">
+              <div className="card-body">
+                <h5 className="card-title">Name: {player.strPlayer}</h5>
+                <p className="card-text">
+                  Facebook: <a href={player.strFacebook} target="_blank" rel="noopener noreferrer">{player.strFacebook}</a>
+                </p>
+                <p className="card-text">
+                  Twitter: <a href={player.strTwitter} target="_blank" rel="noopener noreferrer">{player.strTwitter}</a>
+                </p>
+                <p className="card-text">Role: {player.strPosition}</p>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <img
+                src={player.strThumb}
+                alt={`${player.strPlayer} thumbnail`}
+                className="img-fluid rounded-start"
+                style={{ width: '75%' }}
+              />
+            </div>
+          </div>
+          <div className="card-footer">
+            <small className="text-muted">Description: {player.strDescriptionEN}</small>
+          </div>
         </div>
-    )
-}
+      ))}
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(players.length / playersPerPage)}
+        onPageChange={paginate}
+      />
+    </div>
+  );
+};
+
+export default Players;

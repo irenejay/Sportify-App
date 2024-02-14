@@ -5,6 +5,7 @@ import Leagues from "./components/Leagues";
 import Navbar from "./components/Navbar";
 import Teams from "./components/Teams";
 import LeagueDetails from "./components/LeagueDetails";
+import TeamDetails from "./components/TeamDetails";
 
 function App() {
   const [leagues, setLeagues] = useState([]);
@@ -49,6 +50,8 @@ function App() {
         <Route path="/Leagues" element={<Leagues leagues={leagues} />} />
         <Route path="/Teams" element={<Teams />} />
         <Route path="/league/:leagueName" element={<LeagueDetails />} />
+        <Route path="/teams/:teamName" element={<TeamDetails />} />
+
       </Routes>
     </div>
   );
