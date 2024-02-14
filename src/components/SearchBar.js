@@ -1,11 +1,11 @@
-import React from 'react';
-import { useFormik } from 'formik';
+import React from "react";
+import { useFormik } from "formik";
 
-const validate = values => {
+const validate = (values) => {
   const errors = {};
 
   if (!values.searchQuery) {
-    errors.searchQuery = 'Search query is required';
+    errors.searchQuery = "Search query is required";
   }
 
   return errors;
@@ -14,11 +14,11 @@ const validate = values => {
 const SearchBar = () => {
   const formik = useFormik({
     initialValues: {
-      searchQuery: '',
-      searchType: 'players', 
+      searchQuery: "",
+      searchType: "players",
     },
     validate,
-    onSubmit: values => {
+    onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
   });
@@ -54,7 +54,7 @@ const SearchBar = () => {
               type="radio"
               name="searchType"
               value="players"
-              checked={formik.values.searchType === 'players'}
+              checked={formik.values.searchType === "players"}
               onChange={formik.handleChange}
               className="mr-1"
             />
@@ -65,7 +65,7 @@ const SearchBar = () => {
               type="radio"
               name="searchType"
               value="events"
-              checked={formik.values.searchType === 'events'}
+              checked={formik.values.searchType === "events"}
               onChange={formik.handleChange}
               className="mr-1"
             />
@@ -76,7 +76,7 @@ const SearchBar = () => {
               type="radio"
               name="searchType"
               value="teams"
-              checked={formik.values.searchType === 'teams'}
+              checked={formik.values.searchType === "teams"}
               onChange={formik.handleChange}
               className="mr-1"
             />

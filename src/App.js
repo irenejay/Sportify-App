@@ -1,14 +1,17 @@
 import React from "react";
-import Players from "./components/Players";
-import SearchBar from "./components/Search";
+import { Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import Leagues from "./components/Leagues";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <div className="container">
-      <h1 style={{textAlign:'center'}}>Sportify App</h1>
-      <SearchBar/>
-      <Players />
-     
+    <div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/Leagues" element={<Leagues />} />
+      </Routes>
     </div>
   );
 }
