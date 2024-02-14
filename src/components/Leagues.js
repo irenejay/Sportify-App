@@ -1,41 +1,16 @@
 import React, { useState, useEffect } from "react";
+import Teams from "./Teams";
+import Pagination from "./Pagination";
 
-export default function Leagues() {
-  const [allLeagues, setAllLeagues] = useState([]);
+export default function Leagues({ leagues }) {
   const [selectedLeague, setSelectedLeague] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [leaguesPerPage] = useState(9); // Adjust the number of leagues per page as needed
+  const [leaguesPerPage] = useState(8);
 
   useEffect(() => {
-    fetchLeagues();
-  }, []);
-
-  const fetchLeagues = async () => {
-    const countries = ['England', 'France', 'Spain', 'Italy', 'Germany'];
-
-    try {
-      const promises = countries.map(async (country) => {
-        const url = `https://www.thesportsdb.com/api/v1/json/60130162/search_all_leagues.php?c=${country}&s=Soccer`;
-        const response = await fetch(url, {
-          headers: {
-            "Accept": "application/json",
-            "User-Agent": "Don Gitonga",
-          },
-        });
-
-        const data = await response.json();
-
-        if (data.countries) {
-          setAllLeagues((prevLeagues) => [...prevLeagues, ...data.countries]);
-        }
-      });
-
-      await Promise.all(promises);
-    } catch (error) {
-      console.error("Error fetching leagues:", error);
-    }
-  };
+    // If you want to fetch data when the leagues prop changes, add your fetch logic here
+  }, [leagues]);
 
   const toggleDescription = (league) => {
     setSelectedLeague(league);
@@ -43,29 +18,30 @@ export default function Leagues() {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to the first page when searching
+    setCurrentPage(1);
+    setSelectedLeague(null); // Reset selectedLeague when searching
   };
 
-  // Filtered leagues based on search term
-  const filteredLeagues = allLeagues.filter((league) =>
-    league.strLeague.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filterLeagues = (leagues, searchTerm) => {
+    return leagues.filter((league) =>
+      league.strLeague.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
 
-  // Pagination logic
   const indexOfLastLeague = currentPage * leaguesPerPage;
   const indexOfFirstLeague = indexOfLastLeague - leaguesPerPage;
-  const currentLeagues = filteredLeagues.slice(
+  const currentLeagues = filterLeagues(leagues, searchTerm).slice(
     indexOfFirstLeague,
     indexOfLastLeague
   );
 
-  // Change page
+  const totalPages = Math.ceil(filterLeagues(leagues, searchTerm).length / leaguesPerPage);
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Football Leagues</h2>
-      {/* Search Bar */}
       <div className="mb-3">
         <input
           type="text"
@@ -77,12 +53,11 @@ export default function Leagues() {
       </div>
       <div className="row">
         {currentLeagues.map((league) => (
-          // Add a condition to check if strLogo is not null before rendering the card
           league.strLogo && (
-            <div key={league.idLeague} className="col-md-4 mb-4">
-              <div className="card">
+            <div key={league.idLeague} className="col-md-3 mb-3">
+              <div className="card h-100">
                 <img
-                  src={league.strLogo}
+                  src={league.strBadge}
                   className="card-img-top"
                   alt={league.strLeague}
                 />
@@ -95,27 +70,22 @@ export default function Leagues() {
                     {league.strLeague}
                   </h5>
                   <p className="card-text">Country: {league.strCountry}</p>
-                  {selectedLeague === league && (
-                    <p className="card-text">{league.strDescriptionEN}</p>
-                  )}
+                  <p className="card-text"> 
+                  <a href={`http://${league.strWebsite}`} target="_blank" rel="noopener noreferrer">Website</a>
+
+                  </p>
+                  
                 </div>
               </div>
             </div>
           )
         ))}
       </div>
-      {/* Pagination Buttons */}
-      <div className="d-flex justify-content-center mt-4">
-        {Array.from({ length: Math.ceil(filteredLeagues.length / leaguesPerPage) }).map((_, index) => (
-          <button
-            key={index}
-            className={`btn ${currentPage === index + 1 ? 'btn-primary' : 'btn-light'}`}
-            onClick={() => paginate(index + 1)}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={paginate}
+      />
     </div>
   );
 }
