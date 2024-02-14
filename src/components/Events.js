@@ -58,8 +58,8 @@ function Events() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Current TV Events Based On your Location</h2>
-      <table className="table table-striped">
+      <h2 className="mb-4">Current TV Events Based On your location</h2>
+      <table className="table table-striped hover">
         <thead>
           <tr>
             <th>Event</th>

@@ -7,9 +7,13 @@ const Teams = ({ leagues }) => {
     fetchTeams();
   }, [leagues]);
 
+  async function fetchTeams(){
+
+  }
+
   const fetchTeams = async () => {
     const teamsPromises = leagues.map(async (league) => {
-      const url = `https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=${encodeURIComponent(league.strLeague)}`;
+      const url = `https://www.thesportsdb.com/api/v1/json/60130162/search_all_teams.php?l=${encodeURIComponent(league.strLeague)}`;
 
       try {
         const response = await fetch(url);

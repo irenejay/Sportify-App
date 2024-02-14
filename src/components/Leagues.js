@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 
 export default function Leagues() {
   const [allLeagues, setAllLeagues] = useState([]);
+  const [selectedLeague, setSelectedLeague] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [leaguesPerPage] = useState(9); // Adjust the number of leagues per page as needed
 
   useEffect(() => {
     fetchLeagues();
@@ -21,7 +25,6 @@ export default function Leagues() {
         });
 
         const data = await response.json();
-        console.log(data.countries)
 
         if (data.countries) {
           setAllLeagues((prevLeagues) => [...prevLeagues, ...data.countries]);
@@ -34,14 +37,85 @@ export default function Leagues() {
     }
   };
 
+  const toggleDescription = (league) => {
+    setSelectedLeague(league);
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to the first page when searching
+  };
+
+  // Filtered leagues based on search term
+  const filteredLeagues = allLeagues.filter((league) =>
+    league.strLeague.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Pagination logic
+  const indexOfLastLeague = currentPage * leaguesPerPage;
+  const indexOfFirstLeague = indexOfLastLeague - leaguesPerPage;
+  const currentLeagues = filteredLeagues.slice(
+    indexOfFirstLeague,
+    indexOfLastLeague
+  );
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
-    <div>
-      <h2>Football Leagues</h2>
-      <ul>
-        {allLeagues.map((league) => (
-          <li key={league.idLeague}>{league.strLeague}</li>
+    <div className="container mt-5">
+      <h2 className="mb-4">Football Leagues</h2>
+      {/* Search Bar */}
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search for a league"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
+      <div className="row">
+        {currentLeagues.map((league) => (
+          // Add a condition to check if strLogo is not null before rendering the card
+          league.strLogo && (
+            <div key={league.idLeague} className="col-md-4 mb-4">
+              <div className="card">
+                <img
+                  src={league.strLogo}
+                  className="card-img-top"
+                  alt={league.strLeague}
+                />
+                <div className="card-body">
+                  <h5
+                    className="card-title"
+                    onClick={() => toggleDescription(league)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {league.strLeague}
+                  </h5>
+                  <p className="card-text">Country: {league.strCountry}</p>
+                  {selectedLeague === league && (
+                    <p className="card-text">{league.strDescriptionEN}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
         ))}
-      </ul>
+      </div>
+      {/* Pagination Buttons */}
+      <div className="d-flex justify-content-center mt-4">
+        {Array.from({ length: Math.ceil(filteredLeagues.length / leaguesPerPage) }).map((_, index) => (
+          <button
+            key={index}
+            className={`btn ${currentPage === index + 1 ? 'btn-primary' : 'btn-light'}`}
+            onClick={() => paginate(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

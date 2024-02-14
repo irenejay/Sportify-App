@@ -2,7 +2,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 export default function Navbar(){
-    const navbarLinks = ['','Events','Leagues','HighLights']
+    const navbarLinks = ['','Events','Leagues','Teams']
     const headerStyle = {
         padding:'20px',
         backgroundColor:'teal'

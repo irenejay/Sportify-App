@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const Highlights = () => {
   const [highlights, setHighlights] = useState([]);
@@ -33,12 +36,20 @@ const Highlights = () => {
     }
   };
 
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3, // Adjust the number of visible slides as needed
+    slidesToScroll: 1,
+  };
+
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Recent Match Highlights</h2>
-      <div className="row">
+      <Slider {...sliderSettings}>
         {highlights.map((highlight) => (
-          <div key={highlight.idEvent} className="col-md-4 mb-4">
+          <div key={highlight.idEvent} className="mb-4">
             <div className="card">
               {highlight.strThumb && (
                 <a
@@ -61,7 +72,7 @@ const Highlights = () => {
             </div>
           </div>
         ))}
-      </div>
+      </Slider>
     </div>
   );
 };
