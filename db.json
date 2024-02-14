@@ -76,6 +76,16 @@
       "strThumb": "",
       "strYoutube": "",
       "showVideo": false
+    },
+    {
+      "id": "355d",
+      "idEvent": "",
+      "strEvent": "Arsenal vs Chelsea",
+      "dateEvent": "2024-02-01",
+      "strVenue": "Emirates Stadium",
+      "strThumb": "https://www.thesportsdb.com/images/media/event/thumb/p3uy2m1659642411.jpg",
+      "strYoutube": "",
+      "showVideo": false
     }
   ]
 }

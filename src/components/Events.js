@@ -21,7 +21,6 @@ const Events = () => {
     },
   ]);
 
-  const [loading, setLoading] = useState(false);
   const [eventName, setEventName] = useState('');
   const [showForm, setShowForm] = useState(false); 
   const [newEvent, setNewEvent] = useState({
@@ -34,6 +33,14 @@ const Events = () => {
     showVideo: false, 
   });
 
+  const [loading, setLoading] = useState(false);
+
+  const handleSearch = () => {
+    if (eventName.trim() !== '') {
+      fetchEvents();
+    }
+  };
+
   const fetchEvents = async () => {
     setLoading(true);
     try {
@@ -44,12 +51,6 @@ const Events = () => {
       console.error('Error searching events:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSearch = () => {
-    if (eventName.trim() !== '') {
-      fetchEvents();
     }
   };
 
@@ -83,6 +84,7 @@ const Events = () => {
     }
   };
 
+
   const handleAddEvent = () => {
     setShowForm(true); 
   };
@@ -98,7 +100,7 @@ const Events = () => {
   };
 
   return (
-    <div className="container" style={{ backgroundImage: `url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDFmSmPJY4_6JtadkjJvB1Ee2EsT0dTzOFFA&usqp=CAU')` }}>
+    <div className="container">
       <h1 className="mt-4 mb-4">Event</h1>
       <div className="mb-4">
         <input
@@ -112,8 +114,8 @@ const Events = () => {
       </div>
       <button className="btn btn-success mb-4" onClick={handleAddEvent}>Add Event</button>
       {showForm && (
-    <form onSubmit={handleFormSubmit}>
-        <div className="form-group">
+       <form onSubmit={handleFormSubmit}>
+      <div className="form-group">
             <label>Event Name</label>
             <input
                 type="text"
@@ -159,9 +161,12 @@ const Events = () => {
         <button type="submit" className="btn btn-primary">Submit</button>
     </form>
 )}
-      
       {loading ? (
-        <p>Loading events...</p>
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
       ) : (
         <div className="row">
           {events.map((event) => (
