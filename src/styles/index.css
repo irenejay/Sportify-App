@@ -1,2 +1,19 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
+@import url('https://fonts.cdnfonts.com/css/aoboshi-one');
+@import url('https://fonts.cdnfonts.com/css/quiet-sans');
+*{
+    font-family: 'Quiet Sans', sans-serif;                                                                                              
+}
+h1,h2 {
+    text-align: center;
+    padding: 5px;
+    font-family: 'Aoboshi One', sans-serif;
+                                                
+}
+.header {
+    background: url('https://images.pexels.com/photos/2935983/pexels-photo-2935983.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover;
+    color: white; 
+    padding: 200px 0;
+
+}
 
