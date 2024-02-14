@@ -7,8 +7,10 @@ const Home = () => {
   return (
     <div>
       <div className="header">
-        <div className="container text-center">
-          <h1 className="mb-4"> FootFlick</h1>
+        <div className="overlay">
+          <div className="container d-flex align-items-center justify-content-center h-100">
+            <h1 className="mb-4"> FootFlick</h1>
+          </div>
         </div>
       </div>
 
