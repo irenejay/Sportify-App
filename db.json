@@ -6,6 +6,13 @@
       "strTeam": "Arsenal",
       "goals": "3",
       "id": 1
+    },
+    {
+      "strPlayer": "Test Player",
+      "strNumber": "10",
+      "strTeam": "Test Team",
+      "goals": "5",
+      "id": 2
     }
   ],
   "teams": [],
