@@ -3,6 +3,7 @@ import React from "react";
 import Highlights from "./Highlights";
 import Events from "./Events";
 import SearchBar from "./Search";
+import LiveScores from "./LiveScores";
 
 const Home = () => {
   return (
@@ -21,7 +22,7 @@ const Home = () => {
 
       {/* Container for the Events component */}
       <div className="mt-5">
-        <Events />
+        <LiveScores />
       </div>
     </div>
   );

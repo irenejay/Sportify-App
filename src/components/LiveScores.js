@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 export default function LiveScores() {
   const [liveScores, setLiveScores] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,10 +30,28 @@ export default function LiveScores() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredLiveScores = liveScores.filter((score) =>
+    score.strHomeTeam.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    score.strAwayTeam.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="container mt-5">
       <h2>Live Scores</h2>
-      {liveScores.map((score, index) => (
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search for a team"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
+      {filteredLiveScores.map((score, index) => (
         <div key={index} className="card mb-3">
           <div className="card-body">
             <div className="row">

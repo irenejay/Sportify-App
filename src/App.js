@@ -7,7 +7,7 @@ import Teams from "./components/Teams";
 import LeagueDetails from "./components/LeagueDetails";
 import TeamDetails from "./components/TeamDetails";
 import Favorites from "./components/Favorites";
-import LiveScores from "./components/LiveScores";
+import Events from "./components/Events";
 
 function App() {
   const [leagues, setLeagues] = useState([]);
@@ -53,7 +53,7 @@ function App() {
         <Route path="/Leagues" element={<Leagues leagues={leagues} />} />
         <Route path="/Favorites" element={<Favorites/>} />
         <Route path="/Teams" element={<Teams />} />
-        <Route path="/LiveScores" element={<LiveScores />}/>
+        <Route path="/Events" element={<Events />}/>
         <Route path="/league/:leagueName" element={<LeagueDetails />} />
         <Route path="/teams/:teamName" element={<TeamDetails />} />
 
