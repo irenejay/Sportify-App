@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 export default function Players() {
     const [players, setPlayers] = useState([]);
-    // const [ favouriteCount,setFavouriteCount] = useState(0)
+    
     
 
     useEffect(() => {
