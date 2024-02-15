@@ -6,8 +6,9 @@ const Teams = ({ leagueId }) => {
   const [allTeams, setAllTeams] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [teamsPerPage] = useState(8);
+  const [searchTerm, setSearchTerm] = useState(""); // New state for the search term
 
-  const navigate = useNavigate(); // Get the navigation function
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchTeams();
@@ -64,17 +65,40 @@ const Teams = ({ leagueId }) => {
 
   const indexOfLastTeam = currentPage * teamsPerPage;
   const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
-  const currentTeams = Array.isArray(allTeams)
-    ? allTeams.slice(indexOfFirstTeam, indexOfLastTeam)
+  
+  // Apply the search filter to the teams
+  const filteredTeams = allTeams.filter(team =>
+    team.strTeam.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const currentTeams = Array.isArray(filteredTeams)
+    ? filteredTeams.slice(indexOfFirstTeam, indexOfLastTeam)
     : [];
 
-  const totalPages = Math.ceil((allTeams.length || 1) / teamsPerPage);
+  const totalPages = Math.ceil((filteredTeams.length || 1) / teamsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to the first page when searching
+  };
 
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Football Teams</h2>
+
+      {/* Search Bar */}
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search for a team"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
+
       <div className="row">
         {currentTeams.map((team) => (
           <div key={team.idTeam} className="col-md-3 mb-3">
