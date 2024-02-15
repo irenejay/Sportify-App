@@ -1,7 +1,6 @@
 // Home.jsx
 import React from "react";
 import Highlights from "./Highlights";
-import Events from "./Events";
 import SearchBar from "./SearchBar";
 import LiveScores from "./LiveScores";
 
