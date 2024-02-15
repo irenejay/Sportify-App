@@ -30,7 +30,7 @@ const Teams = ({ leagueId }) => {
       });
 
       if (response.ok) {
-        console.log('Team added to favorites:', team);
+        alert('Team added to favorites:', team);
         // You can add some feedback to the user if needed
       } else {
         console.error('Failed to add team to favorites');
@@ -67,15 +67,15 @@ const Teams = ({ leagueId }) => {
   const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
   
   // Apply the search filter to the teams
-  const filteredTeams = allTeams.filter(team =>
-    team.strTeam.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredTeams = allTeams
+  ? allTeams.filter(team =>
+      team.strTeam.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  : [];
 
-  const currentTeams = Array.isArray(filteredTeams)
-    ? filteredTeams.slice(indexOfFirstTeam, indexOfLastTeam)
-    : [];
+const currentTeams = filteredTeams.slice(indexOfFirstTeam, indexOfLastTeam);
 
-  const totalPages = Math.ceil((filteredTeams.length || 1) / teamsPerPage);
+const totalPages = Math.ceil((filteredTeams.length || 1) / teamsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 

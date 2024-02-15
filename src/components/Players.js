@@ -53,7 +53,7 @@ const Players = ({ team }) => {
         });
   
         if (response.ok) {
-          console.log('Player details added as favorite:', player);
+          alert('Player details added as favorite:', player);
           // You can handle success feedback here if needed
         } else {
           console.error('Failed to add player details as favorite');

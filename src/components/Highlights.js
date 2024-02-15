@@ -33,7 +33,7 @@ const Highlights = () => {
       });
 
       if (response.ok) {
-        console.log('Highlight added to favorites successfully!');
+        alert('Highlight added to favorites successfully!');
         // Optionally, you can update the list of favorite highlights
         setFavoriteHighlights([...favoriteHighlights, highlight]);
       } else {

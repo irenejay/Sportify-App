@@ -7,8 +7,8 @@ export default function Leagues({ leagues }) {
   const [selectedLeague, setSelectedLeague] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [favoriteLeagues, setFavoriteLeagues] = useState([]);
   const [leaguesPerPage] = useState(8);
+  const [favoriteLeagues, setFavoriteLeagues] = useState([]);
 
   const navigate = useNavigate(); // Get the navigation function
 
@@ -83,7 +83,7 @@ export default function Leagues({ leagues }) {
         });
 
         if (response.ok) {
-          console.log("League added to favorites successfully!");
+          alert("League added to favorites successfully!");
           // Optionally, you can navigate or perform any action after successful addition
           // Update the list of favorite leagues
           setFavoriteLeagues([...favoriteLeagues, league]);

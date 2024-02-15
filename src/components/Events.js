@@ -11,6 +11,7 @@ function Events() {
   useEffect(() => {
     // Fetch events when the component mounts
     fetchCurrentEvents();
+    fetchFavoriteEvents();
   }, [currentPage]); // Fetch new events when currentPage changes
 
   const fetchCurrentEvents = async () => {
@@ -65,7 +66,7 @@ function Events() {
       });
 
       if (response.ok) {
-        console.log('Event added to favorites:', event);
+        alert('Event added to favorites:', event);
         // Optionally, you can update the list of favorite events
         setFavoriteEvents([...favoriteEvents, event]);
         // You can add some feedback to the user if needed
@@ -134,7 +135,7 @@ function Events() {
         </thead>
         <tbody>
           {currentEventsPage.map((event) => (
-            <tr key={event.idEvent}>
+            <tr key={event.id}>
               <td>{event.strEvent}</td>
               <td>{event.strTime}</td>
               <td>{event.strChannel}</td>
