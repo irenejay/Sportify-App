@@ -2,12 +2,13 @@
 import React from "react";
 import Highlights from "./Highlights";
 import Events from "./Events";
-import SearchBar from "./Search";
+import SearchBar from "./SearchBar";
 import LiveScores from "./LiveScores";
 
 const Home = () => {
   return (
     <div>
+      
       <div className="header">
         <div className="container text-center">
           <h1 className="mb-4"> FootFlick</h1>
