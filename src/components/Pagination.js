@@ -15,12 +15,22 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     return pageNumbers;
   };
 
+  const handlePageChange = (pageNumber) => {
+    onPageChange(pageNumber);
+
+    // Scroll to the top of the page
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Optional: smooth scrolling animation
+    });
+  };
+
   return (
     <div className="d-flex justify-content-center mt-4">
       {currentPage > 1 && (
         <button
           className="btn btn-light"
-          onClick={() => onPageChange(currentPage - 1)}
+          onClick={() => handlePageChange(currentPage - 1)}
         >
           Previous
         </button>
@@ -30,7 +40,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <button
           key={pageNumber}
           className={`btn ${currentPage === pageNumber ? 'btn-primary' : 'btn-light'}`}
-          onClick={() => onPageChange(pageNumber)}
+          onClick={() => handlePageChange(pageNumber)}
         >
           {pageNumber}
         </button>
@@ -39,7 +49,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       {currentPage < totalPages && (
         <button
           className="btn btn-light"
-          onClick={() => onPageChange(currentPage + 1)}
+          onClick={() => handlePageChange(currentPage + 1)}
         >
           Next
         </button>

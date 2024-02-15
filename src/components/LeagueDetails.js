@@ -50,9 +50,10 @@ const LeagueDetails = () => {
       </div>
       {showTable && (
         <div className="row">
-          <div className="col-md-6 container">
+          <div className="container mt-4">
+          <h1 style={{textAlign:"center"}}>League Table</h1>
             {/* Bootstrap table for leagueTable */}
-            <table className="table table-bordered table-striped table-hover">
+            <table className="table table-striped table-hover">
               <thead>
                 <tr>
                   <th>Team</th>

@@ -51,6 +51,7 @@ export default function LiveScores() {
           onChange={handleSearch}
         />
       </div>
+      {filteredLiveScores.length === 0 && <p>No live scores available</p>}
       {filteredLiveScores.map((score, index) => (
         <div key={index} className="card mb-3">
           <div className="card-body">

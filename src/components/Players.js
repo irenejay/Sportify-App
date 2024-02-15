@@ -37,24 +37,45 @@ const Players = ({ team }) => {
 
   const addFavorite = async (player) => {
     try {
-      const response = await fetch('http://localhost:8001/players', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(player)
-      });
-      
-      if (response.ok) {
-        console.log('Player details added as favorite:', player);
-        // You can handle success feedback here if needed
+      // Check if the player is already in favorites
+      const isPlayerInFavorites = await checkPlayerInFavorites(player);
+  
+      if (isPlayerInFavorites) {
+        alert('Player is already in favorites:', player);
+        // You can provide feedback to the user here if needed
       } else {
-        console.error('Failed to add player details as favorite');
-        // You can handle error feedback here if needed
+        const response = await fetch('http://localhost:8001/players', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(player)
+        });
+  
+        if (response.ok) {
+          console.log('Player details added as favorite:', player);
+          // You can handle success feedback here if needed
+        } else {
+          console.error('Failed to add player details as favorite');
+          // You can handle error feedback here if needed
+        }
       }
     } catch (error) {
       console.error('Error adding player details as favorite:', error);
       // You can handle error feedback here if needed
+    }
+  };
+  
+  // Function to check if the player is already in favorites
+  const checkPlayerInFavorites = async (player) => {
+    try {
+      const response = await fetch(`http://localhost:8001/players?strPlayer=${player.strPlayer}`);
+      const existingPlayers = await response.json();
+      
+      return existingPlayers.length > 0;
+    } catch (error) {
+      console.error('Error checking player in favorites:', error);
+      return false; // Return false in case of an error
     }
   };
 
@@ -77,7 +98,7 @@ const Players = ({ team }) => {
         <input
           type="text"
           className="form-control"
-          placeholder="Search for players"
+          placeholder="Search for players/managers"
           value={searchTerm}
           onChange={handleSearch}
         />

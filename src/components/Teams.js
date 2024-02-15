@@ -112,10 +112,11 @@ const Teams = ({ leagueId }) => {
                 <h5 className="card-title">{team.strTeam}</h5>
                 <p className="card-text">Sport: {team.strSport}</p>
                 <p className="card-rext">Leagues: {team.strLeague},{team.strLeague2},{team.strLeague3},{team.strLeague4} </p>
-                <button className="btn btn-primary" onClick={() => handleButtonClick(team)}>
+                <button className="btn btn-primary mt-2" onClick={() => handleButtonClick(team)}>
                   Get Information
                 </button>
-                <button className="btn btn-primary" onClick={() => onButtonClick(team)}>
+                <br></br>
+                <button className="btn btn-primary mt-2" onClick={() => onButtonClick(team)}>
                   Add Favorite
                 </button>
               </div>

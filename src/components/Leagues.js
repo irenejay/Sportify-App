@@ -98,11 +98,12 @@ export default function Leagues({ leagues }) {
                   </p>
                   {/* Bootstrap Button */}
                   <Link to={`/league/${encodeURIComponent(league.idLeague)}`}>
-                    <button className="btn btn-primary" onClick={() => handleGetInformation(league)}>
+                    <button className="btn btn-primary mt-2" onClick={() => handleGetInformation(league)}>
                       Get Information
                     </button>
                   </Link>
-                  <button className="btn btn-primary" onClick={() => handleAddFavorite(league)}>
+                  <br></br>
+                  <button className="btn btn-primary mt-2" onClick={() => handleAddFavorite(league)}>
                     Add Favorite
                   </button>
                 </div>
