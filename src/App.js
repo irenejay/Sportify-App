@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="container">
       <h1 style={{textAlign:'center'}}>Sportify App</h1>
-      {/* <Navbar/> */}
+     
       <Routes>
       <Route exact path='/' element={<Players />} /> 
       </Routes>

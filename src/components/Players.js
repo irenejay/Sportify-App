@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import { Formik, Field, Form } from "formik";
+
+
 
 export default function Players() {
   const [players, setPlayers] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [playersPerPage] = useState(12);
 
-  const initialValues = {
-    strPlayer: "",
-    strSigning: "",
-    strNationality: "",
-    strThumb: "",
-    strStatus: "",
-  };
+  
 
   useEffect(() => {
     FetchPlayerDetails();
@@ -45,32 +40,7 @@ export default function Players() {
     }
   };
 
-  const addPlayer = async (values) => {
-    try {
-      const response = await fetch('http://localhost:8001/players', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'Application/json',
-          'User-agent': 'learning app',
-        },
-        
-        body: JSON.stringify(values),
-        
-      });
-      console.log(values)
-      if (!response.ok) {
-        console.error('Failed to add player. Server returned:', response.status, response.statusText);
-        alert("error")
-      } else {
-        alert('Player added successfully');
-      }
-    } catch (error) {
-      console.error('Failed to add player', error.message);
-    }
-    setPlayers((prevPlayers) => [...prevPlayers, values]);
-  };
-  
+ 
 
 
   const handleFavourite = (playerId) => {
@@ -107,41 +77,7 @@ export default function Players() {
 
   return (
     <div className="container mt-5">
-      <Formik className="input-group mb-3" initialValues={initialValues} onSubmit={addPlayer}>
-        <Form className="mb-3">
-          <Field
-            type="text"
-            className="form-control form-control-lg" 
-            name="strPlayer"
-            placeholder="Player Name"
-          />
-          <Field
-            type="text"
-            className="form-control form-control-lg" 
-            name="strNationality"
-            placeholder="Player Nationality"
-          />
-          <Field
-            type="text"
-            className="form-control form-control-lg" 
-            name="strStatus"
-            placeholder="Player Status"
-          />
-          <Field
-            type="text"
-            className="form-control form-control-lg" 
-            name="strSigning"
-            placeholder="Signing"
-          />
-          <Field
-            type="url"
-            className="form-control form-control-lg" 
-            name="strThumb"
-            placeholder="Image URL"
-          />
-          <button type="submit">Add Player</button>
-        </Form>
-      </Formik>
+     
       <h2 className="mb-3" style={{ fontFamily: 'Times New Roman Times serif' }}>
         Players Details
       </h2>
@@ -188,6 +124,19 @@ export default function Players() {
           nextLabel={'next'}
           pageCount={pageCount}
           onPageChange={handlePageClick}
+          containerClassName={"pagination justify-content-center"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextClassName={"page-item"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+          activeClassName={"active"}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          renderOnZeroPageCount={null}
         />
       </div>
       <div className="container mt-5">
