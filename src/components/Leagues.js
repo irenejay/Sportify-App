@@ -7,12 +7,27 @@ export default function Leagues({ leagues }) {
   const [selectedLeague, setSelectedLeague] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [favoriteLeagues, setFavoriteLeagues] = useState([]);
   const [leaguesPerPage] = useState(8);
 
   const navigate = useNavigate(); // Get the navigation function
 
   useEffect(() => {
-    // If you want to fetch data when the leagues prop changes, add your fetch logic here
+    const fetchFavoriteLeagues = async () => {
+      try {
+        const response = await fetch("http://localhost:8001/leagues");
+        if (response.ok) {
+          const data = await response.json();
+          setFavoriteLeagues(data);
+        } else {
+          console.error("Failed to fetch favorite leagues.");
+        }
+      } catch (error) {
+        console.error("Error fetching favorite leagues:", error);
+      }
+    };
+
+    fetchFavoriteLeagues();
   }, [leagues]);
 
   const handleGetInformation = (league) => {
@@ -48,6 +63,16 @@ export default function Leagues({ leagues }) {
 
   const addFavoriteLeague = async (league) => {
     if (league && league.strLeague) {
+      // Check if the league is already a favorite
+      const isFavorite = favoriteLeagues.some(
+        (favorite) => favorite.idLeague === league.idLeague
+      );
+
+      if (isFavorite) {
+        alert("This league is already a favorite.");
+        return; // Do not add the league again if it's already a favorite
+      }
+
       try {
         const response = await fetch("http://localhost:8001/leagues", {
           method: "POST",
@@ -56,9 +81,12 @@ export default function Leagues({ leagues }) {
           },
           body: JSON.stringify(league),
         });
+
         if (response.ok) {
           console.log("League added to favorites successfully!");
           // Optionally, you can navigate or perform any action after successful addition
+          // Update the list of favorite leagues
+          setFavoriteLeagues([...favoriteLeagues, league]);
         } else {
           console.error("Failed to add league to favorites.");
         }

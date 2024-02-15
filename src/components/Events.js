@@ -6,6 +6,7 @@ function Events() {
   const [currentPage, setCurrentPage] = useState(1);
   const [eventsPerPage] = useState(8); 
   const [searchTerm, setSearchTerm] = useState('');
+  const [favoriteEvents, setFavoriteEvents] = useState([]);
 
   useEffect(() => {
     // Fetch events when the component mounts
@@ -44,6 +45,16 @@ function Events() {
   };
 
   const onButtonClick = async (event) => {
+    // Check if the event is already a favorite
+    const isFavorite = favoriteEvents.some(
+      (favorite) => favorite.idEvent === event.idEvent
+    );
+
+    if (isFavorite) {
+      alert("This event is already a favorite.");
+      return; // Do not add the event again if it's already a favorite
+    }
+
     try {
       const response = await fetch('http://localhost:8001/events', {
         method: 'POST',
@@ -55,6 +66,8 @@ function Events() {
 
       if (response.ok) {
         console.log('Event added to favorites:', event);
+        // Optionally, you can update the list of favorite events
+        setFavoriteEvents([...favoriteEvents, event]);
         // You can add some feedback to the user if needed
       } else {
         console.error('Failed to add event to favorites');
@@ -63,6 +76,21 @@ function Events() {
     } catch (error) {
       console.error('Error adding event to favorites:', error);
       // You can handle error feedback here if needed
+    }
+  };
+
+  const fetchFavoriteEvents = async () => {
+    // Fetch the list of favorite events when the component mounts
+    try {
+      const response = await fetch("http://localhost:8001/events");
+      if (response.ok) {
+        const data = await response.json();
+        setFavoriteEvents(data);
+      } else {
+        console.error("Failed to fetch favorite events.");
+      }
+    } catch (error) {
+      console.error("Error fetching favorite events:", error);
     }
   };
 

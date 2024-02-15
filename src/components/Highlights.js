@@ -5,23 +5,37 @@ import "slick-carousel/slick/slick-theme.css";
 
 const Highlights = () => {
   const [highlights, setHighlights] = useState([]);
+  const [favoriteHighlights, setFavoriteHighlights] = useState([]);
 
   useEffect(() => {
     fetchHighlights();
+    fetchFavoriteHighlights();
   }, []);
 
   const onButtonClick = async (highlight) => {
+    // Check if the highlight is already a favorite
+    const isFavorite = favoriteHighlights.some(
+      (favorite) => favorite.idEvent === highlight.idEvent
+    );
+
+    if (isFavorite) {
+      alert("This highlight is already a favorite.");
+      return; // Do not add the highlight again if it's already a favorite
+    }
+
     try {
-      const response = await fetch('http://localhost:8001/Highlights', {
+      const response = await fetch('http://localhost:8001/highlights', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ highlight }),
       });
-  
+
       if (response.ok) {
         console.log('Highlight added to favorites successfully!');
+        // Optionally, you can update the list of favorite highlights
+        setFavoriteHighlights([...favoriteHighlights, highlight]);
       } else {
         console.error('Failed to add highlight to favorites');
       }
@@ -29,7 +43,6 @@ const Highlights = () => {
       console.error('Error adding highlight to favorites:', error);
     }
   };
-  
 
   const fetchHighlights = async () => {
     const url = `https://www.thesportsdb.com/api/v1/json/60130162/eventshighlights.php?s=Soccer`;
@@ -54,6 +67,21 @@ const Highlights = () => {
       setHighlights(modifiedHighlights);
     } catch (error) {
       console.error("Error fetching highlights:", error);
+    }
+  };
+
+  const fetchFavoriteHighlights = async () => {
+    // Fetch the list of favorite highlights when the component mounts
+    try {
+      const response = await fetch("http://localhost:8001/highlights");
+      if (response.ok) {
+        const data = await response.json();
+        setFavoriteHighlights(data);
+      } else {
+        console.error("Failed to fetch favorite highlights.");
+      }
+    } catch (error) {
+      console.error("Error fetching favorite highlights:", error);
     }
   };
 
