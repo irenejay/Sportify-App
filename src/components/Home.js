@@ -2,15 +2,17 @@
 import React from "react";
 import Highlights from "./Highlights";
 import Events from "./Events";
-import SearchBar from "./SearchBar"; 
+import SearchBar from "./SearchBar";
+import LiveScores from "./LiveScores";
+
 const Home = () => {
   return (
     <div>
       
       <div className="header">
         <div className="container text-center">
-         <h1 className="mb-4"> FootFlick</h1>
-         <SearchBar />
+          <h1 className="mb-4"> FootFlick</h1>
+          <SearchBar />
         </div>
       </div>
 
@@ -21,7 +23,7 @@ const Home = () => {
 
       {/* Container for the Events component */}
       <div className="mt-5">
-        <Events />
+        <LiveScores />
       </div>
     </div>
   );

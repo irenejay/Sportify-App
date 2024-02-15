@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
+import Pagination from "./Pagination";
 
 function Events() {
   const [currentEvents, setCurrentEvents] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [eventsPerPage] = useState(8); 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [favoriteEvents, setFavoriteEvents] = useState([]);
 
   useEffect(() => {
     // Fetch events when the component mounts
     fetchCurrentEvents();
-  }, []); // Empty dependency array to run the effect only once
+    fetchFavoriteEvents();
+  }, [currentPage]); // Fetch new events when currentPage changes
 
   const fetchCurrentEvents = async () => {
     const date = getDate();
-    const location = getLocation();
     const url = `https://www.thesportsdb.com/api/v1/json/60130162/eventstv.php?d=${date}&s=Soccer`;
 
     try {
@@ -22,13 +27,7 @@ function Events() {
       });
       const data = await response.json();
 
-      // Check if the location data is available, otherwise default to South Africa
-      const filteredEvents = data.tvevents.filter(
-        (event) =>
-          event.strCountry === location || event.strCountry === "South Africa"
-      );
-
-      setCurrentEvents(filteredEvents);
+      setCurrentEvents(data.tvevents);
     } catch (error) {
       console.error("Error fetching highlights:", error);
     }
@@ -46,37 +45,115 @@ function Events() {
     return formattedDate;
   };
 
-  const getLocation = () => {
-    const userLocale = navigator.language || "en-US";
-    const countryName = new Intl.DisplayNames([userLocale], {
-      type: "region",
-    }).of("001");
+  const onButtonClick = async (event) => {
+    // Check if the event is already a favorite
+    const isFavorite = favoriteEvents.some(
+      (favorite) => favorite.idEvent === event.idEvent
+    );
 
-    console.log(countryName);
-    return countryName;
+    if (isFavorite) {
+      alert("This event is already a favorite.");
+      return; // Do not add the event again if it's already a favorite
+    }
+
+    try {
+      const response = await fetch('http://localhost:8001/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(event)
+      });
+
+      if (response.ok) {
+        alert('Event added to favorites:', event);
+        // Optionally, you can update the list of favorite events
+        setFavoriteEvents([...favoriteEvents, event]);
+        // You can add some feedback to the user if needed
+      } else {
+        console.error('Failed to add event to favorites');
+        // You can handle error feedback here if needed
+      }
+    } catch (error) {
+      console.error('Error adding event to favorites:', error);
+      // You can handle error feedback here if needed
+    }
+  };
+
+  const fetchFavoriteEvents = async () => {
+    // Fetch the list of favorite events when the component mounts
+    try {
+      const response = await fetch("http://localhost:8001/events");
+      if (response.ok) {
+        const data = await response.json();
+        setFavoriteEvents(data);
+      } else {
+        console.error("Failed to fetch favorite events.");
+      }
+    } catch (error) {
+      console.error("Error fetching favorite events:", error);
+    }
+  };
+
+  // Pagination logic
+  const indexOfLastEvent = currentPage * eventsPerPage;
+  const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+  const filteredEvents = currentEvents.filter(event =>
+    event.strEvent.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const currentEventsPage = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+  const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset pagination to the first page when searching
   };
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Current TV Events Based On your location</h2>
+      <h2 className="mb-4">Today's TV Events</h2>
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search for an event"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
       <table className="table table-striped hover">
         <thead>
           <tr>
             <th>Event</th>
             <th>Time</th>
             <th>Channel</th>
+            <th>Country</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {currentEvents.map((event) => (
-            <tr key={event.idEvent}>
+          {currentEventsPage.map((event) => (
+            <tr key={event.id}>
               <td>{event.strEvent}</td>
               <td>{event.strTime}</td>
               <td>{event.strChannel}</td>
+              <td>{event.strCountry}</td>
+              <td>
+                <button className="btn btn-primary" onClick={() => onButtonClick(event)}>
+                  Add Favorite
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={paginate}
+      />
     </div>
   );
 }
