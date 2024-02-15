@@ -234,6 +234,28 @@ const Favorites = () => {
     </div>
   </div>
 ))}
+<h2>Favorite Events</h2>
+{favoriteEvents.map((event, index) => (
+  <div key={index} className="card mb-3">
+    <div className="row g-0">
+      <div className="col-md-8">
+        <div className="card-body">
+          <h5 className="card-title">{event.strEvent}</h5>
+          <p className="card-text">Time: {event.strTime}</p>
+          <p className="card-text">Channel: {event.strChannel}</p>
+          <p className="card-text">Country: {event.strCountry}</p>
+          <button className="btn btn-danger" onClick={() => removeFavoriteEvent(event.id)}>
+            Remove Favorite
+          </button>
+        </div>
+      </div>
+      <div className="col-md-4">
+
+      </div>
+    </div>
+  </div>
+))}
+  
       
     </div>
   );
