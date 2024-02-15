@@ -20,7 +20,7 @@ export default function Players() {
   }, []);
 
   const FetchPlayerDetails = async () => {
-    const teams = ['Arsenal','Barcelona','Dortmund','Monaco','Napoli','Real Madrid','Manchester United'];
+    const teams = ['Arsenal','Barcelona','Dortmund','Monaco'];
 
     try {
       const teamPromises = teams.map(async (team) => {
@@ -51,10 +51,14 @@ export default function Players() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'Application/json',
+          'User-agent': 'learning app',
         },
+        
         body: JSON.stringify(values),
+        
       });
-  
+      console.log(values)
       if (!response.ok) {
         console.error('Failed to add player. Server returned:', response.status, response.statusText);
         alert("error")
