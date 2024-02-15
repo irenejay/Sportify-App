@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link from react-router-dom
 import Pagination from "./Pagination";
+import LeagueDetails from "./LeagueDetails";
 
 export default function Leagues({ leagues }) {
   const [selectedLeague, setSelectedLeague] = useState(null);
@@ -14,10 +15,13 @@ export default function Leagues({ leagues }) {
     // If you want to fetch data when the leagues prop changes, add your fetch logic here
   }, [leagues]);
 
-  const handleButtonClick = (league) => {
+  const handleGetInformation = (league) => {
     setSelectedLeague(league);
-    addFavoriteLeague(league);
   };
+
+  const handleAddFavorite = (league) => {
+    addFavoriteLeague(league);
+  }
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -93,12 +97,12 @@ export default function Leagues({ leagues }) {
                     <a href={`http://${league.strWebsite}`} target="_blank" rel="noopener noreferrer">Website</a>
                   </p>
                   {/* Bootstrap Button */}
-                  <Link to={`/league/${encodeURIComponent(league.strLeague)}`}>
-                    <button className="btn btn-primary" onClick={() => handleButtonClick(league)}>
+                  <Link to={`/league/${encodeURIComponent(league.idLeague)}`}>
+                    <button className="btn btn-primary" onClick={() => handleGetInformation(league)}>
                       Get Information
                     </button>
                   </Link>
-                  <button className="btn btn-primary" onClick={() => handleButtonClick(league)}>
+                  <button className="btn btn-primary" onClick={() => handleAddFavorite(league)}>
                     Add Favorite
                   </button>
                 </div>
@@ -112,6 +116,15 @@ export default function Leagues({ leagues }) {
         totalPages={totalPages}
         onPageChange={paginate}
       />
+      {selectedLeague && (
+        <>
+          {console.log(`selected league is ${selectedLeague}`)}
+          <LeagueDetails
+            id={selectedLeague.idLeague}
+            leagueName={selectedLeague.strLeague}
+          />
+        </>
+      )}
     </div>
   );
 }

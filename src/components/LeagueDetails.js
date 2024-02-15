@@ -1,16 +1,14 @@
-// LeagueDetails.js
 import React from "react";
-import { useParams } from "react-router-dom";
 import Teams from "./Teams";
+import { useParams } from "react-router-dom";
 
 const LeagueDetails = () => {
-  const { leagueName } = useParams();
-  console.log(leagueName)
+  const {leagueId} = useParams();
+  console.log(leagueId)
   return (
     <div>
-      <h1>{leagueName}</h1>
       {/* Add additional information or fetch more details as needed */}
-      <Teams leagueName={leagueName}/>
+      <Teams leagueId={leagueId} />
     </div>
   );
 };

@@ -54,7 +54,7 @@ function App() {
         <Route path="/Favorites" element={<Favorites/>} />
         <Route path="/Teams" element={<Teams />} />
         <Route path="/Events" element={<Events />}/>
-        <Route path="/league/:leagueName" element={<LeagueDetails />} />
+        <Route path="/league/:leagueId" element={<LeagueDetails />} />
         <Route path="/teams/:teamName" element={<TeamDetails />} />
 
       </Routes>

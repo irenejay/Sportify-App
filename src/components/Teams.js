@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
 
-const Teams = ({ leagueName }) => {
+const Teams = ({ leagueId }) => {
   const [allTeams, setAllTeams] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [teamsPerPage] = useState(8);
 
@@ -12,7 +11,7 @@ const Teams = ({ leagueName }) => {
 
   useEffect(() => {
     fetchTeams();
-  }, [leagueName]);
+  }, [leagueId]);
 
   const handleButtonClick = (selectedTeam) => {
     const teamName = encodeURIComponent(selectedTeam.strTeam);
@@ -44,7 +43,7 @@ const Teams = ({ leagueName }) => {
 
   const fetchTeams = async () => {
     try {
-      const url = `https://www.thesportsdb.com/api/v1/json/60130162/search_all_teams.php?l=${encodeURIComponent(leagueName)}`;
+      const url = `https://www.thesportsdb.com/api/v1/json/60130162/lookup_all_teams.php?id=${leagueId}`;
       const response = await fetch(url, {
         headers: {
           "Accept": "application/json",
@@ -53,6 +52,7 @@ const Teams = ({ leagueName }) => {
       });
 
       const data = await response.json();
+      console.log(data)
 
       if (data.teams) {
         setAllTeams(data.teams);
@@ -62,41 +62,19 @@ const Teams = ({ leagueName }) => {
     }
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
-  };
-
-  const filterTeams = (teams, searchTerm) => {
-    return teams.filter((team) =>
-      team.strTeam.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  };
-
   const indexOfLastTeam = currentPage * teamsPerPage;
   const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
-  const currentTeams = filterTeams(allTeams, searchTerm).slice(
-    indexOfFirstTeam,
-    indexOfLastTeam
-  );
+  const currentTeams = Array.isArray(allTeams)
+    ? allTeams.slice(indexOfFirstTeam, indexOfLastTeam)
+    : [];
 
-  const totalPages = Math.ceil(filterTeams(allTeams, searchTerm).length / teamsPerPage);
+  const totalPages = Math.ceil((allTeams.length || 1) / teamsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Football Teams</h2>
-      {/* Search Bar */}
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search for a team"
-          value={searchTerm}
-          onChange={handleSearch}
-        />
-      </div>
       <div className="row">
         {currentTeams.map((team) => (
           <div key={team.idTeam} className="col-md-3 mb-3">
