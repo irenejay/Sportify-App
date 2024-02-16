@@ -100,6 +100,23 @@ const Favorites = () => {
   const removeFavoriteTeam = async (teamId) => {
     try {
       // Perform logic to remove team from favorites
+      const response = await fetch(`http://localhost:8001/teams/${teamId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if(response.ok){
+
+        setFavoriteTeams(favoriteTeams.filter((favoriteTeam) => favoriteTeam.id !== teamId));
+        alert('team deleted succesfully');
+
+      }else{
+         alert('team failed to delete')
+      }
+
+      
     } catch (error) {
       console.error('Error removing team from favorites:', error);
     }
