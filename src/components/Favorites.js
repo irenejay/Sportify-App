@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router,Route,Link } from "react-router-dom";
 
 const Favorites = () => {
   const [favoritePlayers, setFavoritePlayers] = useState([]);
@@ -91,20 +92,84 @@ const Favorites = () => {
 
   const removeFavoriteLeague = async (leagueId) => {
     try {
-      // Perform logic to remove league from favorites
+      const isConfirmed = window.confirm('Are you sure you want to remove this league from favorites?');
+  
+      if (!isConfirmed) {
+        // If not confirmed, do nothing
+        return;
+      }
+  
+      const response = await fetch(`http://localhost:8001/leagues/${leagueId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.ok) {
+        // Remove the deleted league from the state
+        setFavoriteLeagues((prevLeagues) =>
+          prevLeagues.filter((league) => league.id !== leagueId)
+        );
+  
+        alert(`League has been removed successfully.`);
+      } else {
+        console.error('Failed to remove league from favorites.');
+      }
     } catch (error) {
       console.error('Error removing league from favorites:', error);
     }
   };
+  
+
   const removeFavoriteHighlight = async (highlightId) => {
     try {
       // Perform logic to remove league from favorites
     } catch (error) {
-      console.error('Error removing league from favorites:', error);
+      console.error('Error removing highlight from favorites:', error);
     }
   };
+  const renderFavoriteLeagues = () => {
+    return (
+      <div>
+      <h2 id="favorite-leagues">Favorite Leagues</h2>
+      {favoriteLeagues.map((league, index) => (
+      <div key={index} className="card mb-3">
+        <div className="row g-0">
+          <div className="col-md-8">
+            <div className="card-body">
+              <h5 className="card-title">{league.strLeague}</h5>
+              <p className="card-text">Sport: {league.strSport}</p>
+              <p className="card-text">Country: {league.strCountry}</p>
+              <p className="card-text">
+                <a href={`http://${league.strWebsite}`} target="_blank" rel="noopener noreferrer">Website</a>
+              </p>
+              <button className="btn btn-danger" onClick={() => removeFavoriteLeague(league.id)}>
+                Remove Favorite
+              </button>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <img
+              src={league.strLogo}
+              alt={`${league.strLeague} logo`}
+              className="img-fluid rounded-start"
+              style={{ width: '100%' }}
+            />
+          </div>
+        </div>
+        <div className="card-footer">
+          <small className="text-muted">Description: {league.strDescriptionEN}</small>
+        </div>
+      </div>
+    ))}
+      </div>
+    )
+
+  }
 
   return (
+  
     <div className="container mt-5">
       <h2>Favorite Players</h2>
       {favoritePlayers.map((player, index) => (
@@ -140,7 +205,7 @@ const Favorites = () => {
         </div>
       ))}
       
-      <h2>Favorite Teams</h2>
+      <h2 >Favorite Teams</h2>
       {favoriteTeams.map((team, index) => (
         <div key={index} className="card mb-3">
           <div className="row g-0">
@@ -203,7 +268,7 @@ const Favorites = () => {
           </div>
         </div>
       ))}
-      <h2>Favorite Leagues</h2>
+      <h2 id="favorite-leagues">Favorite Leagues</h2>
   {favoriteLeagues.map((league, index) => (
   <div key={index} className="card mb-3">
     <div className="row g-0">

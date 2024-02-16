@@ -84,9 +84,8 @@ export default function Leagues({ leagues }) {
 
         if (response.ok) {
           alert("League added to favorites successfully!");
-          // Optionally, you can navigate or perform any action after successful addition
-          // Update the list of favorite leagues
           setFavoriteLeagues([...favoriteLeagues, league]);
+          // Navigate to the favorites section
         } else {
           console.error("Failed to add league to favorites.");
         }
