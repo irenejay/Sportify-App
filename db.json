@@ -1,7 +1,56 @@
 {
   "players": [],
   "teams": [],
-  "events": [],
+  "events": [
+    {
+      "id": "720044",
+      "idEvent": "1923416",
+      "intDivision": "99",
+      "strSport": "Soccer",
+      "strEvent": "Sturm Graz vs Slovan Bratislava",
+      "idChannel": "7749",
+      "strCountry": "Austria",
+      "strLogo": "https://www.thesportsdb.com/images/media/channel/tvlogo/kqy0lc1629913297.png",
+      "strChannel": "Servus TV AT",
+      "strSeason": "2023-2024",
+      "strTime": "17:45:00",
+      "dateEvent": "2024-02-15",
+      "strTimeStamp": "2024-02-15 17:45:00"
+    }
+  ],
   "leagues": [],
-  "HighLights": []
+  "HighLights": [
+    {
+      "highlight": {
+        "idEvent": "1949742",
+        "strEvent": "Godoy Cruz vs Union",
+        "strSport": "Soccer",
+        "idLeague": "5428",
+        "strLeague": "Argentinian Copa de la Liga Profesional",
+        "dateEvent": "2024-02-14",
+        "strVideo": "https://www.youtube.com/watch?v=9ZAE0AyEcH4",
+        "strPoster": "",
+        "strThumb": "https://www.thesportsdb.com/images/media/event/thumb/49w6ir1707914196.jpg",
+        "strFanart": null,
+        "strSeason": "2024"
+      },
+      "id": 1
+    },
+    {
+      "highlight": {
+        "idEvent": "1949753",
+        "strEvent": "Independiente Rivadavia vs Instituto ACC",
+        "strSport": "Soccer",
+        "idLeague": "5428",
+        "strLeague": "Argentinian Copa de la Liga Profesional",
+        "dateEvent": "2024-02-16",
+        "strVideo": "https://www.youtube.com/watch?v=IEMI3kNb13E",
+        "strPoster": "",
+        "strThumb": "https://www.thesportsdb.com/images/media/event/thumb/8wwzca1707914214.jpg",
+        "strFanart": null,
+        "strSeason": "2024"
+      },
+      "id": 2
+    }
+  ]
 }
