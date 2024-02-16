@@ -71,58 +71,6 @@
     }
   ],
   "events": [],
-  "leagues": [
-    {
-      "idLeague": "4399",
-      "idSoccerXML": null,
-      "idAPIfootball": "5347",
-      "strSport": "Soccer",
-      "strLeague": "German 2. Bundesliga",
-      "strLeagueAlternate": "2. Bundesliga",
-      "intDivision": "2",
-      "idCup": "0",
-      "strCurrentSeason": "2023-2024",
-      "intFormedYear": "1974",
-      "dateFirstEvent": "2017-07-28",
-      "strGender": "Male",
-      "strCountry": "Germany",
-      "strWebsite": "www.bundesliga.de/de/liga2",
-      "strFacebook": "",
-      "strInstagram": "",
-      "strTwitter": "",
-      "strYoutube": "",
-      "showVideo": false
-    },
-    {
-      "id": "e216",
-      "idEvent": "",
-      "strEvent": "Arsenal vs Chelsea",
-      "dateEvent": "2024-02-09",
-      "strVenue": "Emirates Stadium",
-      "strThumb": "https://www.thesportsdb.com/images/media/event/thumb/p3uy2m1659642411.jpg",
-      "strYoutube": "",
-      "showVideo": false
-    },
-    {
-      "id": "dd71",
-      "idEvent": "",
-      "strEvent": "Arsenal vs Chelsea",
-      "dateEvent": "2024-02-07",
-      "strVenue": "Emirates Stadium",
-      "strThumb": "",
-      "strYoutube": "",
-      "showVideo": false
-    },
-    {
-      "id": "355d",
-      "idEvent": "",
-      "strEvent": "Arsenal vs Chelsea",
-      "dateEvent": "2024-02-01",
-      "strVenue": "Emirates Stadium",
-      "strThumb": "https://www.thesportsdb.com/images/media/event/thumb/p3uy2m1659642411.jpg",
-      "strYoutube": "",
-      "showVideo": false
-    }
-  ],
+  "leagues": [],
   "HighLights": []
 }
