@@ -129,44 +129,6 @@ const Favorites = () => {
       console.error('Error removing highlight from favorites:', error);
     }
   };
-  const renderFavoriteLeagues = () => {
-    return (
-      <div>
-      <h2 id="favorite-leagues">Favorite Leagues</h2>
-      {favoriteLeagues.map((league, index) => (
-      <div key={index} className="card mb-3">
-        <div className="row g-0">
-          <div className="col-md-8">
-            <div className="card-body">
-              <h5 className="card-title">{league.strLeague}</h5>
-              <p className="card-text">Sport: {league.strSport}</p>
-              <p className="card-text">Country: {league.strCountry}</p>
-              <p className="card-text">
-                <a href={`http://${league.strWebsite}`} target="_blank" rel="noopener noreferrer">Website</a>
-              </p>
-              <button className="btn btn-danger" onClick={() => removeFavoriteLeague(league.id)}>
-                Remove Favorite
-              </button>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <img
-              src={league.strLogo}
-              alt={`${league.strLeague} logo`}
-              className="img-fluid rounded-start"
-              style={{ width: '100%' }}
-            />
-          </div>
-        </div>
-        <div className="card-footer">
-          <small className="text-muted">Description: {league.strDescriptionEN}</small>
-        </div>
-      </div>
-    ))}
-      </div>
-    )
-
-  }
 
   return (
   
