@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router,Route,Link } from "react-router-dom";
 
 const Favorites = () => {
   const [favoritePlayers, setFavoritePlayers] = useState([]);
@@ -105,20 +106,46 @@ const Favorites = () => {
 
   const removeFavoriteLeague = async (leagueId) => {
     try {
-      // Perform logic to remove league from favorites
+      const isConfirmed = window.confirm('Are you sure you want to remove this league from favorites?');
+  
+      if (!isConfirmed) {
+        // If not confirmed, do nothing
+        return;
+      }
+  
+      const response = await fetch(`http://localhost:8001/leagues/${leagueId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.ok) {
+        // Remove the deleted league from the state
+        setFavoriteLeagues((prevLeagues) =>
+          prevLeagues.filter((league) => league.id !== leagueId)
+        );
+  
+        alert(`League has been removed successfully.`);
+      } else {
+        console.error('Failed to remove league from favorites.');
+      }
     } catch (error) {
       console.error('Error removing league from favorites:', error);
     }
   };
+  
+
   const removeFavoriteHighlight = async (highlightId) => {
     try {
       // Perform logic to remove league from favorites
     } catch (error) {
-      console.error('Error removing league from favorites:', error);
+      console.error('Error removing highlight from favorites:', error);
     }
   };
 
   return (
+  
     <div className="container mt-5">
       <h2>Favorite Players</h2>
       {favoritePlayers.map((player, index) => (
@@ -154,7 +181,7 @@ const Favorites = () => {
         </div>
       ))}
       
-      <h2>Favorite Teams</h2>
+      <h2 >Favorite Teams</h2>
       {favoriteTeams.map((team, index) => (
         <div key={index} className="card mb-3">
           <div className="row g-0">
@@ -217,7 +244,7 @@ const Favorites = () => {
           </div>
         </div>
       ))}
-      <h2>Favorite Leagues</h2>
+      <h2 id="favorite-leagues">Favorite Leagues</h2>
   {favoriteLeagues.map((league, index) => (
   <div key={index} className="card mb-3">
     <div className="row g-0">
