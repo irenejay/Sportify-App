@@ -65,14 +65,37 @@ const Favorites = () => {
       console.error('Error fetching highlights:', error);
     }
   };
-
-  const removeFavoritePlayer = async (playerId) => {
+  const removeFavoriteEvent = async (eventId) => {
     try {
-      // Perform logic to remove player from favorites
+      const isConfirmed = window.confirm('Are you sure you want to remove this event from favorites?');
+    
+      if (!isConfirmed) {
+        
+        return;
+      }
+  
+      const response = await fetch(`http://localhost:8001/events/${eventId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.ok) {
+        
+        setFavoriteEvents((prevEvents) =>
+          prevEvents.filter((event) => event.id !== eventId)
+        );
+  
+        alert(`Event has been removed successfully.`);
+      } else {
+        console.error('Failed to remove event from favorites.');
+      }
     } catch (error) {
-      console.error('Error removing player from favorites:', error);
+      console.error('Error removing event from favorites:', error);
     }
   };
+  
 
   const removeFavoriteTeam = async (teamId) => {
     try {
@@ -99,13 +122,7 @@ const Favorites = () => {
     }
   };
 
-  const removeFavoriteEvent = async (eventId) => {
-    try {
-      // Perform logic to remove event from favorites
-    } catch (error) {
-      console.error('Error removing event from favorites:', error);
-    }
-  };
+
 
   const removeFavoriteLeague = async (leagueId) => {
     try {
@@ -165,6 +182,10 @@ const Favorites = () => {
                 </p>
                 <p className="card-text">Role: {player.strPosition}</p>
                 <button className="btn btn-danger" onClick={() => removeFavoritePlayer(player.id)}>
+
+                  Remove Favorite
+                </button>
+                <button className="btn btn-danger" onClick={() => removeFavoriteEvent(event.id)}>
                   Remove Favorite
                 </button>
               </div>
