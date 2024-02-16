@@ -1,192 +1,161 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import Pagination from "./Pagination";
 
-const Events = () => {
-  const [events, setEvents] = useState([
-    {
-      idEvent: 1,
-      strEvent: "Arsenal vs Chelsea",
-      dateEvent: "2023-05-02",
-      strVenue: "Emirates Stadium",
-      strThumb: "https://www.thesportsdb.com/images/media/event/thumb/wy5re41689062588.jpg",
-      strYoutube: null, 
-    },
-    {
-      idEvent: 2,
-      strEvent: "Arsenal vs Chelsea",
-      dateEvent: "2024-02-15",
-      strVenue: "Emirates Stadium",
-      strThumb: "https://www.thesportsdb.com/images/media/event/thumb/p3uy2m1659642411.jpg",
-      strYoutube: "VIDEO_ID", 
-      showVideo:true,
-    },
-  ]);
+function Events() {
+  const [currentEvents, setCurrentEvents] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [eventsPerPage] = useState(8); 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [favoriteEvents, setFavoriteEvents] = useState([]);
 
-  const [eventName, setEventName] = useState('');
-  const [showForm, setShowForm] = useState(false); 
-  const [newEvent, setNewEvent] = useState({
-    idEvent: '', 
-    strEvent: '',
-    dateEvent: '',
-    strVenue: '',
-    strThumb: '',
-    strYoutube: '',
-    showVideo: false, 
-  });
+  useEffect(() => {
+    // Fetch events when the component mounts
+    fetchCurrentEvents();
+    fetchFavoriteEvents();
+  }, [currentPage]); // Fetch new events when currentPage changes
 
-  const [loading, setLoading] = useState(false);
+  const fetchCurrentEvents = async () => {
+    const date = getDate();
+    const url = `https://www.thesportsdb.com/api/v1/json/60130162/eventstv.php?d=${date}&s=Soccer`;
 
-  const handleSearch = () => {
-    if (eventName.trim() !== '') {
-      fetchEvents();
-    }
-  };
-
-  const fetchEvents = async () => {
-    setLoading(true);
     try {
-      const response = await fetch(`https://www.thesportsdb.com/api/v1/json/3/searchevents.php?e=${eventName}`);
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/json",
+          "User-Agent": "Don Gitonga",
+        },
+      });
       const data = await response.json();
-      setEvents(data.event || []); 
+
+      setCurrentEvents(data.tvevents);
     } catch (error) {
-      console.error('Error searching events:', error);
-    } finally {
-      setLoading(false);
+      console.error("Error fetching highlights:", error);
     }
   };
 
-  const addEvent = async (event) => {
+  const getDate = () => {
+    const currentDate = new Date();
+
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
+
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
+  const onButtonClick = async (event) => {
+    // Check if the event is already a favorite
+    const isFavorite = favoriteEvents.some(
+      (favorite) => favorite.idEvent === event.idEvent
+    );
+
+    if (isFavorite) {
+      alert("This event is already a favorite.");
+      return; // Do not add the event again if it's already a favorite
+    }
+
     try {
-      const response = await fetch('http://localhost:8000/events', {
+      const response = await fetch('http://localhost:8001/events', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(event)
       });
+
       if (response.ok) {
-        alert('Event added successfully');
-        setEvents(prevEvents => [...prevEvents, event]);
-        setNewEvent({
-          idEvent: '',
-          strEvent: '',
-          dateEvent: '',
-          strVenue: '',
-          strThumb: '',
-          strYoutube: '',
-          showVideo: false,
-        });
-        setShowForm(false);
+        alert('Event added to favorites:', event);
+        // Optionally, you can update the list of favorite events
+        setFavoriteEvents([...favoriteEvents, event]);
+        // You can add some feedback to the user if needed
       } else {
-        console.error('Failed to add event');
+        console.error('Failed to add event to favorites');
+        // You can handle error feedback here if needed
       }
     } catch (error) {
-      console.error('Failed to add event', error);
+      console.error('Error adding event to favorites:', error);
+      // You can handle error feedback here if needed
     }
   };
 
-
-  const handleAddEvent = () => {
-    setShowForm(true); 
+  const fetchFavoriteEvents = async () => {
+    // Fetch the list of favorite events when the component mounts
+    try {
+      const response = await fetch("http://localhost:8001/events");
+      if (response.ok) {
+        const data = await response.json();
+        setFavoriteEvents(data);
+      } else {
+        console.error("Failed to fetch favorite events.");
+      }
+    } catch (error) {
+      console.error("Error fetching favorite events:", error);
+    }
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    addEvent(newEvent);
-  };
+  // Pagination logic
+  const indexOfLastEvent = currentPage * eventsPerPage;
+  const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+  const filteredEvents = currentEvents.filter(event =>
+    event.strEvent.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const currentEventsPage = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+  const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewEvent({ ...newEvent, [name]: value });
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset pagination to the first page when searching
   };
 
   return (
-    <div className="container">
-      <h1 className="mt-4 mb-4">Event</h1>
-      <div className="mb-4">
+    <div className="container mt-4">
+      <h2 className="mb-4">Today's TV Events</h2>
+      <div className="mb-3">
         <input
           type="text"
           className="form-control"
-          placeholder="Enter event name"
-          value={eventName}
-          onChange={(e) => setEventName(e.target.value)}
+          placeholder="Search for an event"
+          value={searchTerm}
+          onChange={handleSearch}
         />
-        <button className="btn btn-primary ml-2" onClick={handleSearch}>Search</button>
       </div>
-      <button className="btn btn-success mb-4" onClick={handleAddEvent}>Add Event</button>
-      {showForm && (
-       <form onSubmit={handleFormSubmit}>
-      <div className="form-group">
-            <label>Event Name</label>
-            <input
-                type="text"
-                className="form-control"
-                name="strEvent"
-                value={newEvent.strEvent}
-                onChange={handleInputChange}
-                required
-            />
-        </div>
-        <div className="form-group">
-            <label>Date</label>
-            <input
-                type="date"
-                className="form-control"
-                name="dateEvent"
-                value={newEvent.dateEvent}
-                onChange={handleInputChange}
-                required
-            />
-        </div>
-        <div className="form-group">
-            <label>Venue</label>
-            <input
-                type="text"
-                className="form-control"
-                name="strVenue"
-                value={newEvent.strVenue}
-                onChange={handleInputChange}
-                required
-            />
-        </div>
-        <div className="form-group">
-            <label>Thumbnail URL (optional)</label>
-            <input
-                type="url"
-                className="form-control"
-                name="strThumb"
-                value={newEvent.strThumb}
-                onChange={handleInputChange}
-            />
-        </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
-    </form>
-)}
-      {loading ? (
-        <div className="text-center">
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div>
-      ) : (
-        <div className="row">
-          {events.map((event) => (
-            <div key={event.idEvent} className="col-md-4 mb-4">
-              <div className="card">
-                {event.strThumb && (
-                  <img src={event.strThumb} className="card-img-top" alt={event.strEvent} />
-                )}
-                <div className="card-body">
-                  <h5 className="card-title">{event.strEvent}</h5>
-                  <p className="card-text">Date: {event.dateEvent}</p>
-                  <p className="card-text">Venue: {event.strVenue}</p>
-                </div>
-              </div>
-            </div>
+      <table className="table table-striped hover">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Time</th>
+            <th>Channel</th>
+            <th>Country</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentEventsPage.map((event) => (
+            <tr key={event.id}>
+              <td>{event.strEvent}</td>
+              <td>{event.strTime}</td>
+              <td>{event.strChannel}</td>
+              <td>{event.strCountry}</td>
+              <td>
+                <button className="btn btn-primary" onClick={() => onButtonClick(event)}>
+                  Add Favorite
+                </button>
+              </td>
+            </tr>
           ))}
-        </div>
-      )}
+        </tbody>
+      </table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={paginate}
+      />
     </div>
   );
-};
+}
 
 export default Events;
