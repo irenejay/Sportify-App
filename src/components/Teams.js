@@ -15,10 +15,10 @@ const Teams = ({ leagueId }) => {
     fetchTeams();
   }, [leagueId]);
 
-  // Fetch favorite teams from your API
+  
   useEffect(() => {
     fetchFavoriteTeams();
-  }, []);
+  },);
 
   const handleButtonClick = (selectedTeam) => {
     const teamName = encodeURIComponent(selectedTeam.strTeam);
@@ -42,6 +42,7 @@ const Teams = ({ leagueId }) => {
 
       if (response.ok) {
         alert('Team added to favorites:', team);
+        navigate('/favorites/teams')
         setFavoriteTeams((prevFavoriteTeams) => [...prevFavoriteTeams, team]);
       } else {
         console.error('Failed to add team to favorites');

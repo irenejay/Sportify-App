@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "./Pagination"; // Adjust the path based on your project structure
+import Pagination from "./Pagination"; 
+import { useNavigate } from "react-router-dom";
 
 const Players = ({ team }) => {
   const [players, setPlayers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [playersPerPage] = useState(5); // Adjust the number of players per page as needed
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchPlayerDetails();
-  }, [team, searchTerm]); // Include searchTerm in the dependency array to re-fetch when the search term changes
+  }, [team, searchTerm]); 
 
   const fetchPlayerDetails = async () => {
     try {
@@ -54,7 +56,7 @@ const Players = ({ team }) => {
   
         if (response.ok) {
           alert('Player details added as favorite:', player);
-          // You can handle success feedback here if needed
+          navigate('/favorites/players')
         } else {
           console.error('Failed to add player details as favorite');
           // You can handle error feedback here if needed

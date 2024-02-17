@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "./Pagination";
+import { useNavigate} from "react-router-dom";
 
 function Events() {
   const [currentEvents, setCurrentEvents] = useState([]);
@@ -7,6 +8,7 @@ function Events() {
   const [eventsPerPage] = useState(8); 
   const [searchTerm, setSearchTerm] = useState('');
   const [favoriteEvents, setFavoriteEvents] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch events when the component mounts
@@ -67,6 +69,7 @@ function Events() {
 
       if (response.ok) {
         alert('Event added to favorites:', event);
+        navigate('/favorites/events')
         // Optionally, you can update the list of favorite events
         setFavoriteEvents([...favoriteEvents, event]);
         // You can add some feedback to the user if needed
