@@ -5,7 +5,7 @@ export default function Navbar(){
     const navbarLinks = ['','Events','Leagues','Favorites']
     const headerStyle = {
         padding:'20px',
-        backgroundColor:'teal'
+        backgroundColor:'black'
     }
     const navLinkStyle = {
         color: 'white',
