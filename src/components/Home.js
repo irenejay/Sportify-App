@@ -9,12 +9,14 @@ const Home = () => {
     <div>
       
       <div className="header">
-        <div className="container text-center">
-          <h1 className="mb-4"> FootFlick</h1>
-          <SearchBar />
-        </div>
-      </div>
-
+        <div className="overlay">
+           <div className="container  text-center">
+             <h1 className="mb-4"> FootFlick</h1>
+              <SearchBar />
+          </div>
+       </div>
+     </div>
+        
       {/* Container for the Highlights component */}
       <div className="container mt-5">
         <Highlights />
