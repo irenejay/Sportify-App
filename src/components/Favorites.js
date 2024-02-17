@@ -19,7 +19,21 @@ const RenderFavoritePlayers = () => {
   };
   const removeFavoritePlayer = async (playerId) => {
     try {
-      // Perform logic to remove player from favorites
+      const isConfirmed = window.confirm("Are you sure you want to remove this player from favorites?")
+
+      if(!isConfirmed) {
+        return ;
+      }
+      const response = await fetch(`http://localhost:8001/players/${playerId}`,{
+        method: 'DELETE',
+        headers: {
+          'content-Type':'application/json'
+        }
+      })
+      if (response.ok){
+        setFavoritePlayers(favoritePlayers.filter((favoritePlayer) => favoritePlayer.id !== playerId));
+        alert('player deleted successfully')
+      }
     } catch (error) {
       console.error('Error removing player from favorites:', error);
     }
@@ -308,6 +322,21 @@ const RenderFavoriteHighlights = () => {
   const removeFavoriteHighlight = async (highlightId) => {
     try {
       // Perform logic to remove league from favorites
+      const isConfirmed = window.confirm("Are you sure you want to remove this player from favorites?")
+
+      if(!isConfirmed) {
+        return ;
+      }
+      const response = await fetch(`http://localhost:8001/Highlights/${highlightId}`,{
+        method: 'DELETE',
+        headers: {
+          'content-Type':'application/json'
+        }
+      })
+      if (response.ok){
+        setHighlights(highlights.filter((favoriteHighlight) => favoriteHighlight.id !== highlightId));
+        alert('Highlight deleted successfully')
+      }
     } catch (error) {
       console.error('Error removing highlight from favorites:', error);
     }
