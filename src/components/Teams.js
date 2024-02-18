@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback} from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
 
@@ -11,9 +11,30 @@ const Teams = ({ leagueId }) => {
 
   const navigate = useNavigate();
 
+  const fetchTeams = useCallback(async () => {
+    try {
+      const url = `https://www.thesportsdb.com/api/v1/json/60130162/lookup_all_teams.php?id=${leagueId}`;
+      const response = await fetch(url, {
+        headers: {
+          "Accept": "application/json",
+          "User-Agent": "Your User Agent",
+        },
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (data.teams) {
+        setAllTeams(data.teams);
+      }
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+    }
+  },[leagueId]);
+
   useEffect(() => {
     fetchTeams();
-  }, [leagueId]);
+  },[fetchTeams]);
 
   
   useEffect(() => {
@@ -52,26 +73,7 @@ const Teams = ({ leagueId }) => {
     }
   };
 
-  const fetchTeams = async () => {
-    try {
-      const url = `https://www.thesportsdb.com/api/v1/json/60130162/lookup_all_teams.php?id=${leagueId}`;
-      const response = await fetch(url, {
-        headers: {
-          "Accept": "application/json",
-          "User-Agent": "Your User Agent",
-        },
-      });
-
-      const data = await response.json();
-      console.log(data);
-
-      if (data.teams) {
-        setAllTeams(data.teams);
-      }
-    } catch (error) {
-      console.error("Error fetching teams:", error);
-    }
-  };
+ 
 
   const fetchFavoriteTeams = async () => {
     try {

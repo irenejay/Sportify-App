@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import '../styles/index.css'
 
 const PlayerDetails = () => {
     const { playerName } = useParams();
     const [playerDetails, setPlayerDetails] = useState({});
-    const [playerId, setPlayerId] = useState("");
 
-    useEffect(() => {
-        getPlayerInfo();
-    }, []);
-
-    const getPlayerInfo = async () => {
+    const getPlayerInfo = useCallback(async () => {
         try {
             const url = `https://www.thesportsdb.com/api/v1/json/60130162/searchplayers.php?p=${playerName}`;
             const response = await fetch(url, {
@@ -23,13 +18,18 @@ const PlayerDetails = () => {
             const data = await response.json();
             console.log(`This is player data: ${data}`);
             if (data.player) {
-                setPlayerId(data.player.idPlayer);
                 setPlayerDetails(data.player[0]);
             }
         } catch (error) {
             console.error('No player info found');
         }
-    }
+    },[playerName])
+
+    useEffect(() => {
+        getPlayerInfo();
+    }, [getPlayerInfo]);
+
+   
 
     return (
         <div className="container">
