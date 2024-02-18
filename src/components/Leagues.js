@@ -9,8 +9,7 @@ export default function Leagues({ leagues }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [leaguesPerPage] = useState(8);
   const [favoriteLeagues, setFavoriteLeagues] = useState([]);
-
-  const navigate = useNavigate(); // Get the navigation function
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFavoriteLeagues = async () => {
@@ -84,6 +83,7 @@ export default function Leagues({ leagues }) {
 
         if (response.ok) {
           alert("League added to favorites successfully!");
+          navigate('/favorites/leagues');
           setFavoriteLeagues([...favoriteLeagues, league]);
           // Navigate to the favorites section
         } else {

@@ -6,7 +6,8 @@ const Teams = ({ leagueId }) => {
   const [allTeams, setAllTeams] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [teamsPerPage] = useState(8);
-  const [searchTerm, setSearchTerm] = useState(""); // New state for the search term
+  const [searchTerm, setSearchTerm] = useState("");
+  const [favoriteTeams, setFavoriteTeams] = useState([]); // State to store favorite teams
 
   const navigate = useNavigate();
 
@@ -14,12 +15,22 @@ const Teams = ({ leagueId }) => {
     fetchTeams();
   }, [leagueId]);
 
+  
+  useEffect(() => {
+    fetchFavoriteTeams();
+  },);
+
   const handleButtonClick = (selectedTeam) => {
     const teamName = encodeURIComponent(selectedTeam.strTeam);
     navigate(`/teams/${teamName}`);
   };
 
   const onButtonClick = async (team) => {
+    if (isTeamFavorite(team.idTeam)) {
+      alert('Team is already a favorite.');
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:8001/teams', {
         method: 'POST',
@@ -31,14 +42,13 @@ const Teams = ({ leagueId }) => {
 
       if (response.ok) {
         alert('Team added to favorites:', team);
-        // You can add some feedback to the user if needed
+        navigate('/favorites/teams')
+        setFavoriteTeams((prevFavoriteTeams) => [...prevFavoriteTeams, team]);
       } else {
         console.error('Failed to add team to favorites');
-        // You can handle error feedback here if needed
       }
     } catch (error) {
       console.error('Error adding team to favorites:', error);
-      // You can handle error feedback here if needed
     }
   };
 
@@ -53,7 +63,7 @@ const Teams = ({ leagueId }) => {
       });
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
 
       if (data.teams) {
         setAllTeams(data.teams);
@@ -63,19 +73,32 @@ const Teams = ({ leagueId }) => {
     }
   };
 
+  const fetchFavoriteTeams = async () => {
+    try {
+      const response = await fetch('http://localhost:8001/teams');
+      const data = await response.json();
+      setFavoriteTeams(data);
+    } catch (error) {
+      console.error('Error fetching favorite teams:', error);
+    }
+  };
+
+  const isTeamFavorite = (teamId) => {
+    return favoriteTeams.some((team) => team.idTeam === teamId);
+  };
+
   const indexOfLastTeam = currentPage * teamsPerPage;
   const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
-  
-  // Apply the search filter to the teams
+
   const filteredTeams = allTeams
-  ? allTeams.filter(team =>
-      team.strTeam.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  : [];
+    ? allTeams.filter((team) =>
+        team.strTeam.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
-const currentTeams = filteredTeams.slice(indexOfFirstTeam, indexOfLastTeam);
+  const currentTeams = filteredTeams.slice(indexOfFirstTeam, indexOfLastTeam);
 
-const totalPages = Math.ceil((filteredTeams.length || 1) / teamsPerPage);
+  const totalPages = Math.ceil((filteredTeams.length || 1) / teamsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -111,12 +134,21 @@ const totalPages = Math.ceil((filteredTeams.length || 1) / teamsPerPage);
               <div className="card-body">
                 <h5 className="card-title">{team.strTeam}</h5>
                 <p className="card-text">Sport: {team.strSport}</p>
-                <p className="card-rext">Leagues: {team.strLeague},{team.strLeague2},{team.strLeague3},{team.strLeague4} </p>
-                <button className="btn btn-primary mt-2" onClick={() => handleButtonClick(team)}>
+                <p className="card-rext">
+                  Leagues: {team.strLeague},{team.strLeague2},{team.strLeague3},
+                  {team.strLeague4}{" "}
+                </p>
+                <button
+                  className="btn btn-primary mt-2"
+                  onClick={() => handleButtonClick(team)}
+                >
                   Get Information
                 </button>
                 <br></br>
-                <button className="btn btn-primary mt-2" onClick={() => onButtonClick(team)}>
+                <button
+                  className="btn btn-primary mt-2"
+                  onClick={() => onButtonClick(team)}
+                >
                   Add Favorite
                 </button>
               </div>

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useNavigate } from "react-router-dom";
 
 const Highlights = () => {
   const [highlights, setHighlights] = useState([]);
   const [favoriteHighlights, setFavoriteHighlights] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchHighlights();
@@ -34,6 +36,7 @@ const Highlights = () => {
 
       if (response.ok) {
         alert('Highlight added to favorites successfully!');
+        navigate('/favorites/highlights')
         // Optionally, you can update the list of favorite highlights
         setFavoriteHighlights([...favoriteHighlights, highlight]);
       } else {

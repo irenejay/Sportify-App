@@ -1,6 +1,7 @@
 
 import React from "react";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 
 const validate = (values) => {
   const errors = {};
@@ -13,6 +14,7 @@ const validate = (values) => {
 };
 
 const SearchBar = () => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       searchQuery: "",
@@ -20,7 +22,21 @@ const SearchBar = () => {
     },
     validate,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      const { searchType, searchQuery } = values;
+      if (searchType === "teams") {
+        navigate(`/teams/${encodeURIComponent(searchQuery)}`);
+      }
+      else if (searchType === "players") {
+        navigate(`/players/${encodeURIComponent(searchQuery)}`)
+      }
+      else if (searchType === "events") {
+        navigate(`/events/${encodeURIComponent(searchQuery)}`)
+      }
+      else {
+        // Handle other search types or perform different logic
+        alert(JSON.stringify(values, null, 2));
+      }
+
     },
   });
 
