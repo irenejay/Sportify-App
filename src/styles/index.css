@@ -27,7 +27,7 @@ h1,h2 {
 .banner {
     position: relative; /* Ensure proper positioning */
     width: 100%; /* Adjust width as needed */
-    height:80vh; /* Adjust height as needed */
+    height:100vh; /* Adjust height as needed */
     z-index: 1; /* Ensure the banner appears above other elements */
 }
 
