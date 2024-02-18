@@ -11,17 +11,32 @@ h1,h2 {
                                                 
 }
 .header {
-    background: url('/public/sportify-banner.jpg') center/cover;
+    background: url('/public/SportifyBanner1.png') center/cover;
     color: white; 
     padding: 200px 0;
     position: relative;
-    
+    text-align: center;
 }
 
 
 .container{
     position: relative;
+    
 }
+
+.banner {
+    position: relative; /* Ensure proper positioning */
+    width: 100%; /* Adjust width as needed */
+    height:80vh; /* Adjust height as needed */
+    z-index: 1; /* Ensure the banner appears above other elements */
+}
+
+@media (max-width: 768px) {
+    .banner {
+      height: 20vh; 
+    }
+  }
+
 
 
 .overlay {

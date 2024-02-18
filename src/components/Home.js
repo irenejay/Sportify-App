@@ -8,13 +8,12 @@ const Home = () => {
   return (
     <div>
       
-      <div className="header">
-        <div className="container text-center">
-          <h1 className="mb-4"> FootFlick</h1>
+      <div className="header banner"> 
+        <div className="container  text-center">
           <SearchBar />
         </div>
-      </div>
-
+     </div>
+        
       {/* Container for the Highlights component */}
       <div className="container mt-5">
         <Highlights />
