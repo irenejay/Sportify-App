@@ -32,3 +32,20 @@ h1,h2 {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
   }
+
+  .player-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.rounded-thumbnail {
+    border-radius: 50%;
+    width: 200px; /* Adjust the size as needed */
+    height: 200px; /* Adjust the size as needed */
+    margin-right: 20px; /* Adjust the spacing as needed */
+}
+
+.player-description {
+    flex-grow: 1;
+}

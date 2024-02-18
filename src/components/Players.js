@@ -13,6 +13,12 @@ const Players = ({ team }) => {
     fetchPlayerDetails();
   }, [team, searchTerm]); 
 
+  const handleButtonClick = (SelectedPlayer) => {
+    const playerName = encodeURIComponent(SelectedPlayer.strPlayer);
+    navigate(`/players/${playerName}`);
+
+  }
+
   const fetchPlayerDetails = async () => {
     try {
       const url = `https://www.thesportsdb.com/api/v1/json/60130162/searchplayers.php?t=${team}&p=${searchTerm}`;
@@ -119,8 +125,15 @@ const Players = ({ team }) => {
                   Twitter: <a href={player.strTwitter} target="_blank" rel="noopener noreferrer">{player.strTwitter}</a>
                 </p>
                 <p className="card-text">Role: {player.strPosition}</p>
-                <button className="btn btn-primary" onClick={() => addFavorite(player)}>
+                <button className="btn btn-primary mt-2" onClick={() => addFavorite(player)}>
                   Add Favorite
+                </button>
+                <br></br>
+                <button
+                  className="btn btn-primary mt-2"
+                  onClick={() => handleButtonClick(player)}
+                >
+                  Get Information
                 </button>
               </div>
             </div>
@@ -132,9 +145,6 @@ const Players = ({ team }) => {
                 style={{ width: '100%' }}
               />
             </div>
-          </div>
-          <div className="card-footer">
-            <small className="text-muted">Description: {player.strDescriptionEN}</small>
           </div>
         </div>
       ))}

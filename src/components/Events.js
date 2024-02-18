@@ -31,7 +31,7 @@ function Events() {
 
       setCurrentEvents(data.tvevents);
     } catch (error) {
-      console.error("Error fetching highlights:", error);
+      console.error("Error fetching events:", error);
     }
   };
 
