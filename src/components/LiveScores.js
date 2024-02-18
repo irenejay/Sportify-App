@@ -1,8 +1,12 @@
+// LiveScores.jsx
 import React, { useState, useEffect } from "react";
+import Pagination from "./Pagination";
 
 export default function LiveScores() {
   const [liveScores, setLiveScores] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const scoresPerPage = 5; // Adjust the number of scores to display per page as needed
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,26 +22,33 @@ export default function LiveScores() {
       }
     };
 
-    // Fetch data initially
     fetchData();
-
-    // Set interval to fetch data every 10 seconds
     const interval = setInterval(() => {
       fetchData();
     }, 10000);
 
-    // Clear interval on component unmount
     return () => clearInterval(interval);
   }, []);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset current page when searching
   };
 
   const filteredLiveScores = liveScores.filter((score) =>
     score.strHomeTeam.toLowerCase().includes(searchTerm.toLowerCase()) ||
     score.strAwayTeam.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const indexOfLastScore = currentPage * scoresPerPage;
+  const indexOfFirstScore = indexOfLastScore - scoresPerPage;
+  const currentScores = filteredLiveScores.slice(indexOfFirstScore, indexOfLastScore);
+
+  const totalPages = Math.ceil(filteredLiveScores.length / scoresPerPage);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="container mt-5">
@@ -51,8 +62,8 @@ export default function LiveScores() {
           onChange={handleSearch}
         />
       </div>
-      {filteredLiveScores.length === 0 && <p>No live scores available</p>}
-      {filteredLiveScores.map((score, index) => (
+      {currentScores.length === 0 && <p>No live scores available</p>}
+      {currentScores.map((score, index) => (
         <div key={index} className="card mb-3">
           <div className="card-body">
             <div className="row">
@@ -74,6 +85,11 @@ export default function LiveScores() {
           </div>
         </div>
       ))}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 }
