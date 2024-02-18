@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import Pagination from "./Pagination"; 
 import { useNavigate } from "react-router-dom";
 
@@ -9,17 +9,7 @@ const Players = ({ team }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate()
 
-  useEffect(() => {
-    fetchPlayerDetails();
-  }, [team, searchTerm]); 
-
-  const handleButtonClick = (SelectedPlayer) => {
-    const playerName = encodeURIComponent(SelectedPlayer.strPlayer);
-    navigate(`/players/${playerName}`);
-
-  }
-
-  const fetchPlayerDetails = async () => {
+  const fetchPlayerDetails = useCallback(async () => {
     try {
       const url = `https://www.thesportsdb.com/api/v1/json/60130162/searchplayers.php?t=${team}&p=${searchTerm}`;
       const response = await fetch(url, {
@@ -41,7 +31,17 @@ const Players = ({ team }) => {
     } catch (error) {
       console.error('Error fetching data', error);
     }
-  };
+  },[team, searchTerm ]);
+
+  useEffect(() => {
+    fetchPlayerDetails();
+  }, [fetchPlayerDetails]); 
+
+  const handleButtonClick = (SelectedPlayer) => {
+    const playerName = encodeURIComponent(SelectedPlayer.strPlayer);
+    navigate(`/players/${playerName}`);
+
+  }
 
   const addFavorite = async (player) => {
     try {

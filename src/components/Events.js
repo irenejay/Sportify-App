@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Pagination from "./Pagination";
 import { useNavigate} from "react-router-dom";
 
@@ -10,13 +10,7 @@ function Events() {
   const [favoriteEvents, setFavoriteEvents] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Fetch events when the component mounts
-    fetchCurrentEvents();
-    fetchFavoriteEvents();
-  }, [currentPage]); // Fetch new events when currentPage changes
-
-  const fetchCurrentEvents = async () => {
+  const fetchCurrentEvents = useCallback(async () => {
     const date = getDate();
     const url = `https://www.thesportsdb.com/api/v1/json/60130162/eventstv.php?d=${date}&s=Soccer`;
 
@@ -33,7 +27,16 @@ function Events() {
     } catch (error) {
       console.error("Error fetching events:", error);
     }
-  };
+  },[]);
+
+  useEffect(() => {
+    // Fetch events when the component mounts
+    fetchCurrentEvents();
+    fetchFavoriteEvents();
+
+  }, [fetchCurrentEvents]); // Fetch new events when currentPage changes
+
+  
 
   const getDate = () => {
     const currentDate = new Date();

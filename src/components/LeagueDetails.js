@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Teams from "./Teams";
 import { useParams } from "react-router-dom";
 
@@ -8,7 +8,7 @@ const LeagueDetails = () => {
   const { leagueId } = useParams();
   console.log(leagueId);
 
-  const getLeagueTable = async () => {
+  const getLeagueTable = useCallback(async () => {
     try {
       const url = `https://www.thesportsdb.com/api/v1/json/60130162/lookuptable.php?l=${leagueId}&s=2023-2024`;
       const response = await fetch(url, {
@@ -28,11 +28,11 @@ const LeagueDetails = () => {
     } catch (error) {
       console.error("Error fetching league table:", error);
     }
-  };
+  },[leagueId]);
 
   useEffect(() => {
     getLeagueTable();
-  }, [leagueId]);
+  }, [getLeagueTable]);
 
   const handleToggle = () => {
     setShowTable(!showTable);
