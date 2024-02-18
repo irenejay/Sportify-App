@@ -5,7 +5,6 @@ import '../styles/index.css'
 const PlayerDetails = () => {
     const { playerName } = useParams();
     const [playerDetails, setPlayerDetails] = useState({});
-    const [playerId, setPlayerId] = useState("");
 
     useEffect(() => {
         getPlayerInfo();
@@ -23,7 +22,6 @@ const PlayerDetails = () => {
             const data = await response.json();
             console.log(`This is player data: ${data}`);
             if (data.player) {
-                setPlayerId(data.player.idPlayer);
                 setPlayerDetails(data.player[0]);
             }
         } catch (error) {
