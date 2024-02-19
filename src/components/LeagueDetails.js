@@ -54,9 +54,9 @@ const LeagueDetails = () => {
       {tableError && (
         <div className="row">
           <div className="container mt-4">
-            <h1 style={{ textAlign: "center" }}>
+            <h3 style={{ textAlign: "center" }}>
               No league table data available. This is either a cup competition or the API doesn't have table data.
-            </h1>
+            </h3>
           </div>
         </div>
       )}
