@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 const LeagueDetails = () => {
   const [leagueTable, setLeagueTable] = useState([]);
   const [showTable, setShowTable] = useState(true); // Initially show the table
+  const [tableError, setTableError] = useState(false); // State for handling errors
   const { leagueId } = useParams();
   console.log(leagueId);
 
@@ -24,11 +25,13 @@ const LeagueDetails = () => {
         setLeagueTable(data.table);
       } else {
         console.error("No league table data found");
+        setTableError(true);
       }
     } catch (error) {
       console.error("Error fetching league table:", error);
+      setTableError(true);
     }
-  },[leagueId]);
+  }, [leagueId]);
 
   useEffect(() => {
     getLeagueTable();
@@ -48,10 +51,19 @@ const LeagueDetails = () => {
           </button>
         </div>
       </div>
+      {tableError && (
+        <div className="row">
+          <div className="container mt-4">
+            <h1 style={{ textAlign: "center" }}>
+              No league table data available. This is either a cup competition or the API doesn't have table data.
+            </h1>
+          </div>
+        </div>
+      )}
       {showTable && (
         <div className="row">
           <div className="container mt-4">
-          <h1 style={{textAlign:"center"}}>League Table</h1>
+            <h1 style={{ textAlign: "center" }}>League Table</h1>
             {/* Bootstrap table for leagueTable */}
             <table className="table table-striped table-hover">
               <thead>
