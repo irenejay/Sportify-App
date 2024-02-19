@@ -411,19 +411,19 @@
   ],
   "events": [
     {
-      "id": "725802",
-      "idEvent": "1818645",
+      "id": "725322",
+      "idEvent": "1818643",
       "intDivision": "0",
       "strSport": "Soccer",
-      "strEvent": "Luton vs Manchester United",
-      "idChannel": "5938",
-      "strCountry": "United States",
-      "strLogo": "https://www.thesportsdb.com/images/media/tvlogo/yswxwr1433432126.png",
-      "strChannel": "USA Network",
+      "strEvent": "Everton vs Crystal Palace",
+      "idChannel": "230",
+      "strCountry": "New Zealand",
+      "strLogo": "https://www.thesportsdb.com/images/media/channel/tvlogo/3vgq481642607065.png",
+      "strChannel": "Sky Sport 8 NZ",
       "strSeason": "2023-2024",
-      "strTime": "16:30:00",
-      "dateEvent": "2024-02-18",
-      "strTimeStamp": "2024-02-18 16:30:00"
+      "strTime": "20:00:00",
+      "dateEvent": "2024-02-19",
+      "strTimeStamp": "2024-02-19 20:00:00"
     }
   ],
   "leagues": [
@@ -494,6 +494,22 @@
         "strSeason": "2023-2024"
       },
       "id": 1
+    },
+    {
+      "highlight": {
+        "idEvent": "1841318",
+        "strEvent": "Bochum vs Bayern Munich",
+        "strSport": "Soccer",
+        "idLeague": "4331",
+        "strLeague": "German Bundesliga",
+        "dateEvent": "2024-02-18",
+        "strVideo": "https://www.youtube.com/watch?v=AKyObvgNUAY",
+        "strPoster": "https://www.thesportsdb.com/images/media/event/poster/onvpov1688635968.jpg",
+        "strThumb": "https://www.thesportsdb.com/images/media/event/thumb/njh2u91688630698.jpg",
+        "strFanart": null,
+        "strSeason": "2023-2024"
+      },
+      "id": 2
     }
   ]
 }

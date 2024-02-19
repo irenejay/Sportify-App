@@ -20,8 +20,8 @@ const EventDetails = () => {
         if (data.event) {
           // Sort the events by dateEvent in ascending order
           const sortedEvents = data.event.sort((a, b) => {
-            const dateA = new Date(a.dateEvent);
-            const dateB = new Date(b.dateEvent);
+            const dateA = new Date(b.dateEvent);
+            const dateB = new Date(a.dateEvent);
             return dateA - dateB;
           });
 
